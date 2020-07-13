@@ -12,18 +12,22 @@ public class MainGameLoop {
 
         //Square model
         float[] vertices = {
-                -0.5f, 0.5f, 0f,
-                -0.5f, -0.5f, 0f,
-                0.5f, -0.5f, 0f,
-                0.5f, -0.5f, 0f,
-                0.5f, 0.5f, 0f,
-                -0.5f, 0.5f, 0f
+                -0.5f, 0.5f, 0f, //v0
+                -0.5f, -0.5f, 0f, //v1
+                0.5f, -0.5f, 0f, //v2
+                0.5f, 0.5f, 0f, //v3
         };
+
+        int[] indices ={
+                0,1,3,
+                3,1,2
+        };
+
 
         DisplayManager.CreateDisplay();
         Loader loader = new Loader();
         Renderer renderer = new Renderer();
-        RawModel model = loader.LoadtoVAO(vertices);
+        RawModel model = loader.LoadtoVAO(vertices, indices);
 
         while (!Display.isCloseRequested()){
             renderer.Prepare();

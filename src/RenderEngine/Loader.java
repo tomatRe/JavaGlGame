@@ -6,7 +6,9 @@ import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
+import java.nio.Buffer;
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,11 +17,12 @@ public class Loader {
     private List<Integer> vaos = new ArrayList<Integer>();
     private List<Integer> vbos = new ArrayList<Integer>();
 
-    public RawModel LoadtoVAO(float[] positions){
+    public RawModel LoadtoVAO(float[] positions, int[] indices){
         int vaoID = CreateVAO();
+        BindIndicesBuffer(indices);
         StoreDataInAttributeList(0, positions);
         UnbindVAO();
-        return new RawModel(vaoID, positions.length/3);
+        return new RawModel(vaoID, indices.length);
     }
 
     private int CreateVAO(){
@@ -43,6 +46,21 @@ public class Loader {
 
     private FloatBuffer storeDataInFloatBuffer(float[] data){
         FloatBuffer buffer = BufferUtils.createFloatBuffer(data.length);
+        buffer.put(data);
+        buffer.flip();
+        return buffer;
+    }
+
+    private void BindIndicesBuffer(int[] indices){
+        int vboID = GL15.glGenBuffers();
+        vbos.add(vboID);
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, vboID);
+        IntBuffer buffer = StoreDataInIntBuffer(indices);
+        GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER,buffer,GL15.GL_STATIC_DRAW);
+    }
+
+    private IntBuffer StoreDataInIntBuffer(int[] data){
+        IntBuffer buffer = BufferUtils.createIntBuffer(data.length);
         buffer.put(data);
         buffer.flip();
         return buffer;

@@ -1,7 +1,5 @@
-package Engine;
+package RenderEngine;
 
-import com.sun.xml.internal.messaging.saaj.soap.impl.HeaderElementImpl;
-import org.lwjgl.Sys;
 import org.lwjgl.opengl.*;
 
 public class DisplayManager {

@@ -2,9 +2,8 @@ package EngineRun;
 
 import RenderEngine.DisplayManager;
 import RenderEngine.Loader;
-import RenderEngine.RawModel;
+import Models.RawModel;
 import RenderEngine.Renderer;
-import Shaders.ShaderProgram;
 import Shaders.StaticShader;
 import org.lwjgl.opengl.Display;
 

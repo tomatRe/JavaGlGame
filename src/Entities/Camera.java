@@ -32,9 +32,9 @@ public class Camera {
 
     public void Rotate(){
         if (Keyboard.isKeyDown(Keyboard.KEY_UP))
-            pitch +=  rotationSpeed;
-        if (Keyboard.isKeyDown(Keyboard.KEY_DOWN))
             pitch -=  rotationSpeed;
+        if (Keyboard.isKeyDown(Keyboard.KEY_DOWN))
+            pitch +=  rotationSpeed;
         if (Keyboard.isKeyDown(Keyboard.KEY_LEFT))
             yaw -=  rotationSpeed;
         if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT))

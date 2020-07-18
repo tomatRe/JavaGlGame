@@ -26,33 +26,37 @@ public class MainGameLoop {
 
         //TEST MODEL
         RawModel model = ObjLoader.LoadObjModel("fruit", loader);
-        //RawModel potModel = ObjLoader.LoadObjModel("plant", loader);
+        RawModel hiresmodel = ObjLoader.LoadObjModel("fruit_hipoly", loader);
 
         ModelTexture texture = new ModelTexture(loader.LoadTexture("metal"));
         TextureModel textureModel = new TextureModel(model,texture);
-        //TextureModel textureModelpot = new TextureModel(potModel, texture);
+        TextureModel hiresFruit = new TextureModel(hiresmodel);
 
         Entity fruit = new Entity(textureModel,
                 new Vector3f(0,-2,-5),
                 new Vector3f(0,0,0), 0.5f);
 
-        /*Entity pot = new Entity(textureModelpot,
-                new Vector3f(3,0,-2),
-                new Vector3f(0,0,0), 0.5f);*/
+        Entity fruit2 = new Entity(hiresFruit,
+                new Vector3f(5,-2,-5),
+                new Vector3f(0,0,0), 0.5f);
 
         System.out.println("Finished Loading");
 
         while (!Display.isCloseRequested()){
+            //CAMERA
             camera.Move();
             camera.Rotate();
 
+            //RENDERER
             renderer.Prepare();
             shader.Start();
             shader.LoadViewMatrix(camera);
 
+            //SCENE
             renderer.Render(fruit, shader);
-            //renderer.Render(pot, shader);
+            renderer.Render(fruit2, shader);
 
+            //UPDATE FRAME
             shader.Stop();
             DisplayManager.UpdateDisplay();
         }

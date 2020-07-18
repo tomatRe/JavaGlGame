@@ -29,17 +29,17 @@ public class ObjLoader {
         try {
             FileReader fr = new FileReader(new File("res/"+fileName+".obj"));
             BufferedReader reader = new BufferedReader(fr);
-            String line;
+            String line = null;
+            boolean exit = false;
 
-            int lineIndex = 0;
-
-            while (true){
+            while (!exit){
                 line = reader.readLine();
 
                 if (line != null && !line.equals("")){
-                    String[] currentLine = line.split(" ");
+                    String after = line.trim().replaceAll(" +", " ");
+                    String[] currentLine = after.split(" ");
 
-                    if (line.startsWith("v ") &&
+                    if (currentLine[0].toLowerCase().equals("v") &&
                             !currentLine[1].equals("") && !currentLine[2].equals("") && !currentLine[3].equals("")){
                         Vector3f vertex = new Vector3f(
                                 Float.parseFloat(currentLine[1]),
@@ -47,7 +47,7 @@ public class ObjLoader {
                                 Float.parseFloat(currentLine[3])
                         );
                         vertices.add(vertex);
-                    }else if(line.startsWith("vt ") &&
+                    }else if(currentLine[0].toLowerCase().equals("vt") &&
                             !currentLine[1].equals("") && !currentLine[2].equals("")){
                         Vector2f texture = new Vector2f(
                                 Float.parseFloat(currentLine[1]),
@@ -55,7 +55,7 @@ public class ObjLoader {
                         );
                         textures.add(texture);
                     }
-                    else if(line.startsWith("vn ")
+                    else if(currentLine[0].toLowerCase().equals("vn")
                     && !currentLine[1].equals("") && !currentLine[2].equals("") && !currentLine[3].equals("")){
                         Vector3f normal = new Vector3f(
                                 Float.parseFloat(currentLine[1]),
@@ -64,27 +64,26 @@ public class ObjLoader {
                         );
                         normals.add(normal);
                     }
-                    else if (line.startsWith("f ")){
+                    else if (currentLine[0].toLowerCase().equals("f")){
                         texturesArray = new float[vertices.size() * 2];
                         normalsArray = new float[vertices.size()*3];
-                        break;
+                        exit = true;
                     }
                 }
             }
 
             while (line != null){
-                if (!line.startsWith("f ")){
-                    continue;
-                }
-
                 String[] currentLine = line.split(" ");
-                String[] vertex1 = currentLine[1].split("/");
-                String[] vertex2 = currentLine[2].split("/");
-                String[] vertex3 = currentLine[3].split("/");
 
-                processVertex(vertex1, indices, textures, normals, texturesArray, normalsArray);
-                processVertex(vertex2, indices, textures, normals, texturesArray, normalsArray);
-                processVertex(vertex3, indices, textures, normals, texturesArray, normalsArray);
+                if (currentLine[0].toLowerCase().equals("f")){
+                    String[] vertex1 = currentLine[1].split("/");
+                    String[] vertex2 = currentLine[2].split("/");
+                    String[] vertex3 = currentLine[3].split("/");
+
+                    processVertex(vertex1, indices, textures, normals, texturesArray, normalsArray);
+                    processVertex(vertex2, indices, textures, normals, texturesArray, normalsArray);
+                    processVertex(vertex3, indices, textures, normals, texturesArray, normalsArray);
+                }
 
                 line = reader.readLine();
             }
@@ -122,6 +121,7 @@ public class ObjLoader {
         int currentVertexPointer = Integer.parseInt(vertexData[0]) -1;
         indices.add(currentVertexPointer);
         Vector2f currentTex = textures.get(Integer.parseInt(vertexData[1])-1);
+
         textureArray[currentVertexPointer*2] = currentTex.x;
         textureArray[currentVertexPointer*2+1] = 1-currentTex.y;
         Vector3f currentNorm = normals.get(Integer.parseInt(vertexData[2])-1);

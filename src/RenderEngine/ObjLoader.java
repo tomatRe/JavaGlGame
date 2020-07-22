@@ -110,7 +110,7 @@ public class ObjLoader {
             indicesArray[i] = indices.get(i);
         }
 
-        return loader.LoadtoVAO(verticesArray,texturesArray, indicesArray);
+        return loader.LoadtoVAO(verticesArray,texturesArray, normalsArray, indicesArray);
     }
 
     private static void processVertex

@@ -2,6 +2,7 @@ package EngineRun;
 
 import Entities.Camera;
 import Entities.Entity;
+import Entities.Light;
 import Models.TextureModel;
 import RenderEngine.DisplayManager;
 import RenderEngine.Loader;
@@ -15,6 +16,9 @@ import org.lwjgl.util.vector.Vector3f;
 
 public class MainGameLoop {
 
+    static final Vector3f lightColor = new Vector3f(1,1,1);
+    static final Vector3f lightPosition = new Vector3f(0,50,0);
+
     public static void main(String[] args){
 
         //ESENTIALS
@@ -23,6 +27,7 @@ public class MainGameLoop {
         StaticShader shader = new StaticShader();
         Renderer renderer = new Renderer(shader);
         Camera camera = new Camera();
+        Light light = new Light(lightPosition, lightColor);
 
         //MODELS
         RawModel model = ObjLoader.LoadObjModel("fruit", loader);
@@ -64,6 +69,7 @@ public class MainGameLoop {
             renderer.Prepare();
             shader.Start();
             shader.LoadViewMatrix(camera);
+            shader.LoadLight(light);
 
             //SCENE
             renderer.Render(fruit, shader);

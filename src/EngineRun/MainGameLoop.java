@@ -24,13 +24,18 @@ public class MainGameLoop {
         Renderer renderer = new Renderer(shader);
         Camera camera = new Camera();
 
-        //TEST MODEL
+        //MODELS
         RawModel model = ObjLoader.LoadObjModel("fruit", loader);
         RawModel hiresmodel = ObjLoader.LoadObjModel("fruit_hipoly", loader);
+        RawModel stallmodel = ObjLoader.LoadObjModel("stall", loader);
+        RawModel dragonmodel = ObjLoader.LoadObjModel("dragon", loader);
 
+        //TEXTURES
         ModelTexture texture = new ModelTexture(loader.LoadTexture("metal"));
         TextureModel textureModel = new TextureModel(model,texture);
         TextureModel hiresFruit = new TextureModel(hiresmodel);
+        TextureModel stall = new TextureModel(stallmodel);
+        TextureModel dragonText = new TextureModel(dragonmodel);
 
         Entity fruit = new Entity(textureModel,
                 new Vector3f(0,-2,-5),
@@ -38,6 +43,14 @@ public class MainGameLoop {
 
         Entity fruit2 = new Entity(hiresFruit,
                 new Vector3f(5,-2,-5),
+                new Vector3f(0,0,0), 0.5f);
+
+        Entity stallEntity = new Entity(stall,
+                new Vector3f(0,0,0),
+                new Vector3f(0,0,0), 0.5f);
+
+        Entity dragon = new Entity(dragonText,
+                new Vector3f(5,0,5),
                 new Vector3f(0,0,0), 0.5f);
 
         System.out.println("Finished Loading");
@@ -55,6 +68,8 @@ public class MainGameLoop {
             //SCENE
             renderer.Render(fruit, shader);
             renderer.Render(fruit2, shader);
+            renderer.Render(stallEntity, shader);
+            renderer.Render(dragon, shader);
 
             //UPDATE FRAME
             shader.Stop();

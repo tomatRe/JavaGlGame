@@ -9,7 +9,9 @@ public class Maths {
     public static Matrix4f createTransofrmationMatrix
             (Vector3f transform, Vector3f rotation, float scale){
 
-        float rx = rotation.x,ry = rotation.y,rz = rotation.z;
+        float rx = rotation.x;
+        float ry = rotation.y;
+        float rz = rotation.z;
 
         Matrix4f matrix = new Matrix4f();
         matrix.setIdentity();

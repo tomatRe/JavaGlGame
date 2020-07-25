@@ -27,6 +27,9 @@ public class MasterRenderer {
     private Map<TexturedModel, List<Entity>> entities = new HashMap<TexturedModel, List<Entity>>();
 
     public MasterRenderer() {
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glCullFace(GL11.GL_BACK);
+
         CreateProjectionMatrix();
         entityRenderer = new EntityRenderer(shader, projectionMatrix);
     }

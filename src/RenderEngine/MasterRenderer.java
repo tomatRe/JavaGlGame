@@ -5,6 +5,8 @@ import Entities.Entity;
 import Entities.Light;
 import Models.TexturedModel;
 import Shaders.StaticShader;
+import Shaders.TerrainShader;
+import Terrains.Terrain;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
@@ -24,7 +26,11 @@ public class MasterRenderer {
     private StaticShader shader = new StaticShader();
     private EntityRenderer entityRenderer;
 
+    private TerrainRenderer terrainRenderer;
+    private TerrainShader terrainShader = new TerrainShader();
+
     private Map<TexturedModel, List<Entity>> entities = new HashMap<TexturedModel, List<Entity>>();
+    private List<Terrain> terrains = new ArrayList<>();
 
     public MasterRenderer() {
         GL11.glEnable(GL11.GL_CULL_FACE);
@@ -32,17 +38,27 @@ public class MasterRenderer {
 
         CreateProjectionMatrix();
         entityRenderer = new EntityRenderer(shader, projectionMatrix);
+        terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
     }
 
     public void Render(Light sun, Camera camera){
         Prepare();
+
         shader.Start();
+        terrainShader.Start();
+
         shader.LoadLight(sun);
         shader.LoadViewMatrix(camera);
+        terrainShader.LoadLight(sun);
+        terrainShader.LoadViewMatrix(camera);
 
         entityRenderer.Render(entities);
+        terrainRenderer.Render(terrains);
 
         shader.Stop();
+        terrainShader.Stop();
+
+        terrains.clear();
         entities.clear();
     }
 
@@ -58,6 +74,10 @@ public class MasterRenderer {
             newBatch.add(entity);
             entities.put(entityModel, newBatch);
         }
+    }
+
+    public void ProcessTerrain(Terrain terrain){
+        terrains.add(terrain);
     }
 
     public void Prepare(){
@@ -84,5 +104,6 @@ public class MasterRenderer {
 
     public void CleanUp(){
         shader.CleanUp();
+        terrainShader.CleanUp();
     }
 }

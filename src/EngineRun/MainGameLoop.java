@@ -7,6 +7,7 @@ import Models.TexturedModel;
 import RenderEngine.*;
 import Models.RawModel;
 import Shaders.StaticShader;
+import Terrains.Terrain;
 import Textures.ModelTexture;
 import org.lwjgl.Sys;
 import org.lwjgl.opengl.Display;
@@ -20,8 +21,14 @@ public class MainGameLoop {
 
     static final Vector3f lightColor = new Vector3f(1,1,1);
     static final Vector3f lightPosition = new Vector3f(0,50,0);
+    static final boolean showFps = true;
 
     public static void main(String[] args){
+
+        //FPS INFO
+        int fps = 0;
+        float timePerFrame = 0;
+        float totalTime = 0;
 
         //ESENTIALS
         DisplayManager.CreateDisplay();
@@ -68,12 +75,9 @@ public class MainGameLoop {
         mapEntities.add(stallEntity);
         mapEntities.add(dragon);
 
-        System.out.println("Finished Loading");
+        Terrain terrain = new Terrain(0,0, loader, texture);
 
-        boolean showFps = true;
-        int fps = 0;
-        float timePerFrame = 0;
-        float totalTime = 0;
+        System.out.println("Finished Loading");
 
         while (!Display.isCloseRequested()){
             long beforeMS = System.currentTimeMillis();
@@ -86,6 +90,7 @@ public class MainGameLoop {
             for (Entity entity: mapEntities){
                 renderer.ProcessEntity(entity);
             }
+            renderer.ProcessTerrain(terrain);
 
             //RENDERER
             renderer.Render(light, camera);

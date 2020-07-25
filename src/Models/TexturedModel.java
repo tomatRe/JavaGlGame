@@ -3,17 +3,17 @@ package Models;
 import RenderEngine.Loader;
 import Textures.ModelTexture;
 
-public class TextureModel {
+public class TexturedModel {
 
     private RawModel rawModel;
     private ModelTexture texture;
 
-    public TextureModel(RawModel rawModel, ModelTexture texture) {
+    public TexturedModel(RawModel rawModel, ModelTexture texture) {
         this.rawModel = rawModel;
         this.texture = texture;
     }
 
-    public TextureModel(RawModel rawModel) {
+    public TexturedModel(RawModel rawModel) {
 
         Loader loader = new Loader();
 

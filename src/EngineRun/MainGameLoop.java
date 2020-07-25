@@ -3,16 +3,18 @@ package EngineRun;
 import Entities.Camera;
 import Entities.Entity;
 import Entities.Light;
-import Models.TextureModel;
-import RenderEngine.DisplayManager;
-import RenderEngine.Loader;
+import Models.TexturedModel;
+import RenderEngine.*;
 import Models.RawModel;
-import RenderEngine.ObjLoader;
-import RenderEngine.Renderer;
 import Shaders.StaticShader;
 import Textures.ModelTexture;
+import org.lwjgl.Sys;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class MainGameLoop {
 
@@ -24,10 +26,9 @@ public class MainGameLoop {
         //ESENTIALS
         DisplayManager.CreateDisplay();
         Loader loader = new Loader();
-        StaticShader shader = new StaticShader();
-        Renderer renderer = new Renderer(shader);
         Camera camera = new Camera();
         Light light = new Light(lightPosition, lightColor);
+        MasterRenderer renderer = new MasterRenderer();
 
         //MODELS
         RawModel model = ObjLoader.LoadObjModel("fruit", loader);
@@ -37,12 +38,15 @@ public class MainGameLoop {
 
         //TEXTURES
         ModelTexture texture = new ModelTexture(loader.LoadTexture("metal"));
-        TextureModel textureModel = new TextureModel(model,texture);
-        TextureModel hiresFruit = new TextureModel(hiresmodel);
-        TextureModel stall = new TextureModel(stallmodel);
-        TextureModel dragonText = new TextureModel(dragonmodel);
+        texture.setShineDumper(10);
+        texture.setReflectivity(1);
 
-        Entity fruit = new Entity(textureModel,
+        TexturedModel texturedModel = new TexturedModel(model,texture);
+        TexturedModel hiresFruit = new TexturedModel(hiresmodel);
+        TexturedModel stall = new TexturedModel(stallmodel);
+        TexturedModel dragonText = new TexturedModel(dragonmodel);
+
+        Entity fruit = new Entity(texturedModel,
                 new Vector3f(0,-2,-5),
                 new Vector3f(0,0,0), 0.5f);
 
@@ -58,31 +62,53 @@ public class MainGameLoop {
                 new Vector3f(5,0,5),
                 new Vector3f(0,0,0), 0.5f);
 
+        List<Entity> mapEntities = new ArrayList<>();
+        mapEntities.add(fruit);
+        mapEntities.add(fruit2);
+        mapEntities.add(stallEntity);
+        mapEntities.add(dragon);
+
         System.out.println("Finished Loading");
 
+        boolean showFps = true;
+        int fps = 0;
+        float timePerFrame = 0;
+        float totalTime = 0;
+
         while (!Display.isCloseRequested()){
+            long beforeMS = System.currentTimeMillis();
+
             //CAMERA
             camera.Move();
             camera.Rotate();
 
-            //RENDERER
-            renderer.Prepare();
-            shader.Start();
-            shader.LoadViewMatrix(camera);
-            shader.LoadLight(light);
-
             //SCENE
-            renderer.Render(fruit, shader);
-            renderer.Render(fruit2, shader);
-            renderer.Render(stallEntity, shader);
-            renderer.Render(dragon, shader);
+            for (Entity entity: mapEntities){
+                renderer.ProcessEntity(entity);
+            }
+
+            //RENDERER
+            renderer.Render(light, camera);
 
             //UPDATE FRAME
-            shader.Stop();
             DisplayManager.UpdateDisplay();
+
+            //FPS STATS
+            if (showFps){
+                timePerFrame = (System.currentTimeMillis() - beforeMS);
+                timePerFrame /= 1000;
+                totalTime += timePerFrame;
+                if (totalTime >= 1){
+                    System.out.println(fps + " Fps - " + timePerFrame + " Ms");
+                    fps = 0;
+                    totalTime = 0;
+                }
+                else
+                    fps++;
+            }
         }
 
-        shader.CleanUp();
+        renderer.CleanUp();
         loader.CleanUp();
         DisplayManager.CloseDisplay();
     }

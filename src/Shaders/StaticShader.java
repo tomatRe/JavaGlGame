@@ -15,6 +15,8 @@ public class StaticShader extends ShaderProgram{
     private int location_viewMatrix;
     private int location_lightPosition;
     private int location_lightColour;
+    private int location_shineDamper;
+    private int location_refelectivity;
 
     public StaticShader() {
         super(VERTEX_FILE, FRAGMENT_FILE);
@@ -36,6 +38,12 @@ public class StaticShader extends ShaderProgram{
 
         location_lightColour =
                 super.GetUniformLocation("lightColour");
+
+        location_shineDamper =
+                super.GetUniformLocation("shineDamper");
+
+        location_refelectivity =
+                super.GetUniformLocation("refelectivity");
     }
 
     @Override
@@ -48,6 +56,11 @@ public class StaticShader extends ShaderProgram{
     public void LoadLight(Light light){
         super.LoadVector(location_lightPosition, light.getPosition());
         super.LoadVector(location_lightColour, light.getColour());
+    }
+
+    public void LoadShineVariables(float damper, float reflectivity){
+        super.LoadFloat(location_refelectivity, reflectivity);
+        super.LoadFloat(location_shineDamper, damper);
     }
 
     public void LoadTransformationMatrix(Matrix4f matrix){

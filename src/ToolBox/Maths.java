@@ -18,8 +18,8 @@ public class Maths {
         Matrix4f.translate(transform, matrix, matrix);
 
         Matrix4f.rotate((float) Math.toRadians(rx), new Vector3f(1,0,0), matrix,matrix);
-        Matrix4f.rotate((float) Math.toRadians(ry), new Vector3f(1,1,0), matrix,matrix);
-        Matrix4f.rotate((float) Math.toRadians(rz), new Vector3f(1,0,1), matrix,matrix);
+        Matrix4f.rotate((float) Math.toRadians(ry), new Vector3f(0,1,0), matrix,matrix);
+        Matrix4f.rotate((float) Math.toRadians(rz), new Vector3f(0,0,1), matrix,matrix);
 
         Matrix4f.scale(new Vector3f(scale,scale,scale), matrix, matrix);
 

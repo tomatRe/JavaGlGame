@@ -18,7 +18,7 @@ import java.util.Random;
 public class MainGameLoop {
 
     static final Vector3f lightColor = new Vector3f(1,1,1);
-    static final Vector3f lightPosition = new Vector3f(0,50,0);
+    static final Vector3f lightPosition = new Vector3f(50,25,50);
     static final boolean showFps = true;
 
     public static void main(String[] args){
@@ -39,6 +39,7 @@ public class MainGameLoop {
         RawModel fernModel = ObjLoader.LoadObjModel("fern", loader);
         RawModel grassModel = ObjLoader.LoadObjModel("grassModel", loader);
         RawModel treeModel = ObjLoader.LoadObjModel("lowPolyTree", loader);
+        RawModel basicIcoModel = ObjLoader.LoadObjModel("basicIco", loader);
 
         //TEXTURES
         ModelTexture terrainTexture = new ModelTexture(loader.LoadTexture("grass"));
@@ -52,9 +53,11 @@ public class MainGameLoop {
         TexturedModel ferntextured = new TexturedModel(fernModel,fernTexture);
         TexturedModel grassTextured = new TexturedModel(grassModel, grassTexture);
         TexturedModel treeTextured = new TexturedModel(treeModel, treeTexture);
+        TexturedModel icoTextured = new TexturedModel(basicIcoModel);
 
         ferntextured.getTexture().setUseFakeLightning(true);
         grassTextured.getTexture().setUseFakeLightning(true);
+        icoTextured.getTexture().setUseFakeLightning(true);
 
         //SCENARY
         List<Entity> mapEntities = new ArrayList<>();
@@ -84,8 +87,7 @@ public class MainGameLoop {
             Entity tree = new Entity(treeTextured, pos, rot, 1f);
             mapEntities.add(tree);
         }
-
-
+        Entity lightIco = new Entity(icoTextured, lightPosition, new Vector3f(0,0,0), 1);
 
         System.out.println("Finished Loading");
 
@@ -100,6 +102,7 @@ public class MainGameLoop {
             for (Entity entity: mapEntities){
                 renderer.ProcessEntity(entity);
             }
+            renderer.ProcessEntity(lightIco);
             renderer.ProcessTerrain(terrain);
 
             //RENDERER

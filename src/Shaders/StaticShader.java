@@ -4,6 +4,7 @@ import Entities.Camera;
 import Entities.Light;
 import ToolBox.Maths;
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
 
 public class StaticShader extends ShaderProgram{
 
@@ -18,6 +19,7 @@ public class StaticShader extends ShaderProgram{
     private int location_shineDamper;
     private int location_refelectivity;
     private int location_useFakeLightning;
+    private int location_skyColour;
 
     public StaticShader() {
         super(VERTEX_FILE, FRAGMENT_FILE);
@@ -48,6 +50,9 @@ public class StaticShader extends ShaderProgram{
 
         location_useFakeLightning =
                 super.GetUniformLocation("useFakeLightning");
+
+        location_skyColour =
+                super.GetUniformLocation("skyColour");
     }
 
     @Override
@@ -55,6 +60,11 @@ public class StaticShader extends ShaderProgram{
         super.BindAttribute(0,"position");
         super.BindAttribute(1, "textureCoords");
         super.BindAttribute(2, "normals");
+    }
+
+    public void LoadSkyColour(float r, float g, float b){
+        super.LoadVector(location_skyColour, new Vector3f(r,g,b));
+
     }
 
     public void LoadFakeLightningVariable(boolean useFake){

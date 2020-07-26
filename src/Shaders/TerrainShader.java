@@ -4,6 +4,7 @@ import Entities.Camera;
 import Entities.Light;
 import ToolBox.Maths;
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
 
 public class TerrainShader extends ShaderProgram{
 
@@ -17,6 +18,7 @@ public class TerrainShader extends ShaderProgram{
     private int location_lightColour;
     private int location_shineDamper;
     private int location_refelectivity;
+    private int location_skyColour;
 
     public TerrainShader() {
         super(VERTEX_FILE, FRAGMENT_FILE);
@@ -44,6 +46,9 @@ public class TerrainShader extends ShaderProgram{
 
         location_refelectivity =
                 super.GetUniformLocation("refelectivity");
+
+        location_skyColour =
+                super.GetUniformLocation("skyColour");
     }
 
     @Override
@@ -51,6 +56,10 @@ public class TerrainShader extends ShaderProgram{
         super.BindAttribute(0,"position");
         super.BindAttribute(1, "textureCoords");
         super.BindAttribute(2, "normals");
+    }
+
+    public void LoadSkyColour(float r, float g, float b){
+        super.LoadVector(location_skyColour, new Vector3f(r,g,b));
     }
 
     public void LoadLight(Light light){

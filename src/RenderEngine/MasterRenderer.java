@@ -10,6 +10,8 @@ import Terrains.Terrain;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector4f;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +22,8 @@ public class MasterRenderer {
     private static final float FOV = 70;
     private static final float NEAR_PLANE = 0.1f;
     private static final float FAR_PLANE = 1000f;
+    private static final Vector4f SKY_COLOUR = new Vector4f(0.181f,0.222f,0.230f,1f);
+
     private Matrix4f projectionMatrix;
 
     private StaticShader shader = new StaticShader();
@@ -48,15 +52,21 @@ public class MasterRenderer {
     }
 
     public void Render(Light sun, Camera camera){
+        float skyR = SKY_COLOUR.x;
+        float skyG = SKY_COLOUR.y;
+        float skyB = SKY_COLOUR.z;
+
         Prepare();
 
         terrainShader.Start();
+        terrainShader.LoadSkyColour(skyR, skyG, skyB);
         terrainShader.LoadLight(sun);
         terrainShader.LoadViewMatrix(camera);
         terrainRenderer.Render(terrains);
         terrainShader.Stop();
 
         shader.Start();
+        shader.LoadSkyColour(skyR, skyG, skyB);
         shader.LoadLight(sun);
         shader.LoadViewMatrix(camera);
         entityRenderer.Render(entities);
@@ -85,10 +95,15 @@ public class MasterRenderer {
     }
 
     public void Prepare(){
+        float skyR = SKY_COLOUR.x;
+        float skyG = SKY_COLOUR.y;
+        float skyB = SKY_COLOUR.z;
+        float skyA = SKY_COLOUR.w;
+
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
         GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
-        GL11.glClearColor(0.2f,0.2f,0.2f,1f);//BACKGROUND COLOR
+        GL11.glClearColor(skyR, skyG, skyB, skyA);//BACKGROUND COLOR
     }
 
     private void CreateProjectionMatrix(){

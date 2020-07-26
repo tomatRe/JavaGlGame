@@ -56,7 +56,7 @@ public class MainGameLoop {
         //SCENARY
         List<Entity> mapEntities = new ArrayList<>();
         Terrain terrain = new Terrain(0,0, loader, terrainTexture);
-        int numOfFerns = 5000;
+        int numOfFerns = 10000;
 
         for (int i = 0; i < numOfFerns; i++){
 

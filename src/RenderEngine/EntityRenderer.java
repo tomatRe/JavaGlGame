@@ -54,6 +54,7 @@ public class EntityRenderer {
             MasterRenderer.DisableCulling();
         }
 
+        shader.LoadFakeLightningVariable(texture.usingFakeLightning());
         shader.LoadShineVariables(texture.getShineDumper(), texture.getReflectivity());
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTexture().getID());

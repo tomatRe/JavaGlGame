@@ -7,6 +7,15 @@ public class ModelTexture {
     private float reflectivity = 0;
 
     private boolean hasTransparecy = false;
+    private boolean useFakeLightning = false;
+
+    public boolean usingFakeLightning() {
+        return useFakeLightning;
+    }
+
+    public void setUseFakeLightning(boolean useFakeLightning) {
+        this.useFakeLightning = useFakeLightning;
+    }
 
     public ModelTexture(int textureID) {
         this.textureID = textureID;

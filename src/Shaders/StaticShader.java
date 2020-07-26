@@ -17,6 +17,7 @@ public class StaticShader extends ShaderProgram{
     private int location_lightColour;
     private int location_shineDamper;
     private int location_refelectivity;
+    private int location_useFakeLightning;
 
     public StaticShader() {
         super(VERTEX_FILE, FRAGMENT_FILE);
@@ -44,6 +45,9 @@ public class StaticShader extends ShaderProgram{
 
         location_refelectivity =
                 super.GetUniformLocation("refelectivity");
+
+        location_useFakeLightning =
+                super.GetUniformLocation("useFakeLightning");
     }
 
     @Override
@@ -51,6 +55,10 @@ public class StaticShader extends ShaderProgram{
         super.BindAttribute(0,"position");
         super.BindAttribute(1, "textureCoords");
         super.BindAttribute(2, "normals");
+    }
+
+    public void LoadFakeLightningVariable(boolean useFake){
+        super.LoadBoolean(location_useFakeLightning, useFake);
     }
 
     public void LoadLight(Light light){

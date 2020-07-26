@@ -50,8 +50,8 @@ public class MainGameLoop {
         TexturedModel ferntextured = new TexturedModel(fernModel,fernTexture);
         TexturedModel grassTextured = new TexturedModel(grassModel, grassTexture);
 
-        ferntextured.getTexture().setHasTransparecy(true);
-        grassTextured.getTexture().setHasTransparecy(true);
+        ferntextured.getTexture().setUseFakeLightning(true);
+        grassTextured.getTexture().setUseFakeLightning(true);
 
         //SCENARY
         List<Entity> mapEntities = new ArrayList<>();

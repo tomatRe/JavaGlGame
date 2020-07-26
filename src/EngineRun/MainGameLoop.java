@@ -38,17 +38,20 @@ public class MainGameLoop {
         //MODELS
         RawModel fernModel = ObjLoader.LoadObjModel("fern", loader);
         RawModel grassModel = ObjLoader.LoadObjModel("grassModel", loader);
+        RawModel treeModel = ObjLoader.LoadObjModel("lowPolyTree", loader);
 
         //TEXTURES
         ModelTexture terrainTexture = new ModelTexture(loader.LoadTexture("grass"));
         ModelTexture fernTexture = new ModelTexture(loader.LoadTexture("fern"));
         ModelTexture grassTexture = new ModelTexture(loader.LoadTexture("grassTexture"));
+        ModelTexture treeTexture = new ModelTexture(loader.LoadTexture("lowPolyTree"));
         terrainTexture.setShineDumper(10);
         terrainTexture.setReflectivity(1);
 
         //TEXTURED MODELS
         TexturedModel ferntextured = new TexturedModel(fernModel,fernTexture);
         TexturedModel grassTextured = new TexturedModel(grassModel, grassTexture);
+        TexturedModel treeTextured = new TexturedModel(treeModel, treeTexture);
 
         ferntextured.getTexture().setUseFakeLightning(true);
         grassTextured.getTexture().setUseFakeLightning(true);
@@ -57,13 +60,12 @@ public class MainGameLoop {
         List<Entity> mapEntities = new ArrayList<>();
         Terrain terrain = new Terrain(0,0, loader, terrainTexture);
         int numOfFerns = 5000;
+        int numOfTrees = 500;
 
         for (int i = 0; i < numOfFerns; i++){
-
             Random rnd = new Random();
-
             Vector3f pos = new Vector3f(rnd.nextFloat()*100, 0, rnd.nextFloat()*100);
-            Vector3f rot = new Vector3f(0, 0, 0);
+            Vector3f rot = new Vector3f(0, rnd.nextFloat()*360, 0);
 
             if (i%2 == 0){
                 Entity fern = new Entity(ferntextured, pos, rot, 0.05f);
@@ -74,6 +76,16 @@ public class MainGameLoop {
                 mapEntities.add(grass);
             }
         }
+
+        for (int i = 0; i < numOfTrees; i++){
+            Random rnd = new Random();
+            Vector3f pos = new Vector3f(rnd.nextFloat()*100, 0, rnd.nextFloat()*100);
+            Vector3f rot = new Vector3f(0, rnd.nextFloat()*360, 0);
+            Entity tree = new Entity(treeTextured, pos, rot, 0.05f);
+            mapEntities.add(tree);
+        }
+
+
 
         System.out.println("Finished Loading");
 

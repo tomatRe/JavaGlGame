@@ -19,10 +19,10 @@ import java.util.Map;
 
 public class MasterRenderer {
 
-    private static final float FOV = 70;
+    private static final float FOV = 90;
     private static final float NEAR_PLANE = 0.1f;
     private static final float FAR_PLANE = 1000f;
-    private static final Vector4f SKY_COLOUR = new Vector4f(0.181f,0.222f,0.230f,1f);
+    private static final Vector4f SKY_COLOUR = new Vector4f(0.411764705f,0.776470588f,0.8f,1f);
 
     private Matrix4f projectionMatrix;
 

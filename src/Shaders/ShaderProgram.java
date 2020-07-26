@@ -1,15 +1,12 @@
 package Shaders;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.Sys;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.util.vector.Matrix;
 import org.lwjgl.util.vector.Vector3f;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.nio.Buffer;
 import java.nio.FloatBuffer;
 
 public abstract class ShaderProgram {

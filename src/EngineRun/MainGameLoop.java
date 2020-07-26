@@ -6,16 +6,14 @@ import Entities.Light;
 import Models.TexturedModel;
 import RenderEngine.*;
 import Models.RawModel;
-import Shaders.StaticShader;
 import Terrains.Terrain;
 import Textures.ModelTexture;
-import org.lwjgl.Sys;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 public class MainGameLoop {
 
@@ -38,44 +36,33 @@ public class MainGameLoop {
         MasterRenderer renderer = new MasterRenderer();
 
         //MODELS
-        RawModel model = ObjLoader.LoadObjModel("fruit", loader);
-        RawModel hiresmodel = ObjLoader.LoadObjModel("fruit_hipoly", loader);
-        RawModel stallmodel = ObjLoader.LoadObjModel("stall", loader);
-        RawModel dragonmodel = ObjLoader.LoadObjModel("dragon", loader);
+        RawModel fernModel = ObjLoader.LoadObjModel("fern", loader);
 
         //TEXTURES
-        ModelTexture texture = new ModelTexture(loader.LoadTexture("metal"));
-        texture.setShineDumper(10);
-        texture.setReflectivity(1);
+        ModelTexture grassTexture = new ModelTexture(loader.LoadTexture("grass"));
+        ModelTexture fernTexture = new ModelTexture(loader.LoadTexture("fern"));
+        grassTexture.setShineDumper(10);
+        grassTexture.setReflectivity(1);
 
-        TexturedModel texturedModel = new TexturedModel(model,texture);
-        TexturedModel hiresFruit = new TexturedModel(hiresmodel);
-        TexturedModel stall = new TexturedModel(stallmodel);
-        TexturedModel dragonText = new TexturedModel(dragonmodel);
+        //TEXTURED MODELS
+        TexturedModel ferntextured = new TexturedModel(fernModel,fernTexture);
 
-        Entity fruit = new Entity(texturedModel,
-                new Vector3f(0,-2,-5),
-                new Vector3f(0,0,0), 0.5f);
-
-        Entity fruit2 = new Entity(hiresFruit,
-                new Vector3f(5,-2,-5),
-                new Vector3f(0,0,0), 0.5f);
-
-        Entity stallEntity = new Entity(stall,
-                new Vector3f(0,0,0),
-                new Vector3f(0,0,0), 0.5f);
-
-        Entity dragon = new Entity(dragonText,
-                new Vector3f(5,0,5),
-                new Vector3f(0,0,0), 0.5f);
-
+        //SCENARY
         List<Entity> mapEntities = new ArrayList<>();
-        mapEntities.add(fruit);
-        mapEntities.add(fruit2);
-        mapEntities.add(stallEntity);
-        mapEntities.add(dragon);
+        Terrain terrain = new Terrain(0,0, loader, grassTexture);
+        int numOfFerns = 5000;
 
-        Terrain terrain = new Terrain(0,0, loader, texture);
+        for (int i = 0; i < numOfFerns; i++){
+
+            Random rnd = new Random();
+
+            Vector3f pos = new Vector3f(rnd.nextFloat()*100, 0, rnd.nextFloat()*100);
+            Vector3f rot = new Vector3f(0, /*rnd.nextFloat()*36*/0, 0);
+
+            Entity fern = new Entity(ferntextured, pos, rot, 0.05f);
+
+            mapEntities.add(fern);
+        }
 
         System.out.println("Finished Loading");
 

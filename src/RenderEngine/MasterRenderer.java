@@ -44,19 +44,17 @@ public class MasterRenderer {
     public void Render(Light sun, Camera camera){
         Prepare();
 
-        shader.Start();
         terrainShader.Start();
-
-        shader.LoadLight(sun);
-        shader.LoadViewMatrix(camera);
         terrainShader.LoadLight(sun);
         terrainShader.LoadViewMatrix(camera);
-
-        entityRenderer.Render(entities);
         terrainRenderer.Render(terrains);
-
-        shader.Stop();
         terrainShader.Stop();
+
+        shader.Start();
+        shader.LoadLight(sun);
+        shader.LoadViewMatrix(camera);
+        entityRenderer.Render(entities);
+        shader.Stop();
 
         terrains.clear();
         entities.clear();

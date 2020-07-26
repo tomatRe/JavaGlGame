@@ -56,14 +56,16 @@ public class MainGameLoop {
         TexturedModel icoTextured = new TexturedModel(basicIcoModel);
 
         ferntextured.getTexture().setUseFakeLightning(true);
+        ferntextured.getTexture().setHasTransparecy(true);
         grassTextured.getTexture().setUseFakeLightning(true);
+        grassTextured.getTexture().setHasTransparecy(true);
         icoTextured.getTexture().setUseFakeLightning(true);
 
         //SCENARY
         List<Entity> mapEntities = new ArrayList<>();
         Terrain terrain = new Terrain(0,0, loader, terrainTexture);
         int numOfFerns = 5000;
-        int numOfTrees = 500;
+        int numOfTrees = 5000;
 
         for (int i = 0; i < numOfFerns; i++){
             Random rnd = new Random();

@@ -93,6 +93,8 @@ public class MainGameLoop {
 
         System.out.println("Finished Loading");
 
+        camera.SetRotation(new Vector3f(0,180,0));
+
         while (!Display.isCloseRequested()){
             long beforeMS = System.currentTimeMillis();
 

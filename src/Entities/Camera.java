@@ -41,6 +41,12 @@ public class Camera {
             yaw +=  rotationSpeed*deltaTime;
     }
 
+    public void SetRotation(Vector3f rotation){
+        pitch = rotation.x;
+        yaw = rotation.y;
+        roll = rotation.z;
+    }
+
     public Vector3f getPosition() {
         return position;
     }

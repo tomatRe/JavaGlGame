@@ -49,12 +49,19 @@ public class EntityRenderer {
         GL20.glEnableVertexAttribArray(2);
 
         ModelTexture texture = model.getTexture();
+
+        if (texture.hasTransparecy()){
+            MasterRenderer.DisableCulling();
+        }
+
         shader.LoadShineVariables(texture.getShineDumper(), texture.getReflectivity());
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTexture().getID());
     }
 
     private void UnbindTexturedModel(){
+        MasterRenderer.EnableCulling();
+
         GL20.glDisableVertexAttribArray(0);
         GL20.glDisableVertexAttribArray(1);
         GL20.glDisableVertexAttribArray(2);

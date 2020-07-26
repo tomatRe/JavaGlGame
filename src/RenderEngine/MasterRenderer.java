@@ -10,7 +10,6 @@ import Terrains.Terrain;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,12 +32,19 @@ public class MasterRenderer {
     private List<Terrain> terrains = new ArrayList<>();
 
     public MasterRenderer() {
-        GL11.glEnable(GL11.GL_CULL_FACE);
-        GL11.glCullFace(GL11.GL_BACK);
-
+        EnableCulling();
         CreateProjectionMatrix();
         entityRenderer = new EntityRenderer(shader, projectionMatrix);
         terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
+    }
+
+    public static void EnableCulling(){
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glCullFace(GL11.GL_BACK);
+    }
+
+    public static void DisableCulling(){
+        GL11.glDisable(GL11.GL_CULL_FACE);
     }
 
     public void Render(Light sun, Camera camera){

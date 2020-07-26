@@ -37,19 +37,25 @@ public class MainGameLoop {
 
         //MODELS
         RawModel fernModel = ObjLoader.LoadObjModel("fern", loader);
+        RawModel grassModel = ObjLoader.LoadObjModel("grassModel", loader);
 
         //TEXTURES
-        ModelTexture grassTexture = new ModelTexture(loader.LoadTexture("grass"));
+        ModelTexture terrainTexture = new ModelTexture(loader.LoadTexture("grass"));
         ModelTexture fernTexture = new ModelTexture(loader.LoadTexture("fern"));
-        grassTexture.setShineDumper(10);
-        grassTexture.setReflectivity(1);
+        ModelTexture grassTexture = new ModelTexture(loader.LoadTexture("grassTexture"));
+        terrainTexture.setShineDumper(10);
+        terrainTexture.setReflectivity(1);
 
         //TEXTURED MODELS
         TexturedModel ferntextured = new TexturedModel(fernModel,fernTexture);
+        TexturedModel grassTextured = new TexturedModel(grassModel, grassTexture);
+
+        ferntextured.getTexture().setHasTransparecy(true);
+        grassTextured.getTexture().setHasTransparecy(true);
 
         //SCENARY
         List<Entity> mapEntities = new ArrayList<>();
-        Terrain terrain = new Terrain(0,0, loader, grassTexture);
+        Terrain terrain = new Terrain(0,0, loader, terrainTexture);
         int numOfFerns = 5000;
 
         for (int i = 0; i < numOfFerns; i++){
@@ -59,9 +65,14 @@ public class MainGameLoop {
             Vector3f pos = new Vector3f(rnd.nextFloat()*100, 0, rnd.nextFloat()*100);
             Vector3f rot = new Vector3f(0, /*rnd.nextFloat()*36*/0, 0);
 
-            Entity fern = new Entity(ferntextured, pos, rot, 0.05f);
-
-            mapEntities.add(fern);
+            if (i%2 == 0){
+                Entity fern = new Entity(ferntextured, pos, rot, 0.05f);
+                mapEntities.add(fern);
+            }
+            else{
+                Entity grass = new Entity(grassTextured,pos,rot, 0.1f);
+                mapEntities.add(grass);
+            }
         }
 
         System.out.println("Finished Loading");

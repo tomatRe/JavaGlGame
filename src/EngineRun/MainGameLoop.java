@@ -56,14 +56,14 @@ public class MainGameLoop {
         //SCENARY
         List<Entity> mapEntities = new ArrayList<>();
         Terrain terrain = new Terrain(0,0, loader, terrainTexture);
-        int numOfFerns = 10000;
+        int numOfFerns = 5000;
 
         for (int i = 0; i < numOfFerns; i++){
 
             Random rnd = new Random();
 
             Vector3f pos = new Vector3f(rnd.nextFloat()*100, 0, rnd.nextFloat()*100);
-            Vector3f rot = new Vector3f(0, /*rnd.nextFloat()*36*/0, 0);
+            Vector3f rot = new Vector3f(0, 0, 0);
 
             if (i%2 == 0){
                 Entity fern = new Entity(ferntextured, pos, rot, 0.05f);

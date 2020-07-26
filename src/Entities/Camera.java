@@ -9,36 +9,36 @@ public class Camera {
     private float pitch;
     private float yaw;
     private float roll;
-    private final float cameraSpeed = 0.02f;
-    private final float rotationSpeed = 0.5f;
+    private final float cameraSpeed = 10f;
+    private final float rotationSpeed = 100f;
 
     public Camera() {
     }
 
-    public void Move(){
+    public void Move(float deltaTime){
         if (Keyboard.isKeyDown(Keyboard.KEY_W))
-            position.z -=  cameraSpeed;
+            position.z -=  cameraSpeed*deltaTime;
         if (Keyboard.isKeyDown(Keyboard.KEY_D))
-            position.x +=  cameraSpeed;
+            position.x +=  cameraSpeed*deltaTime;
         if (Keyboard.isKeyDown(Keyboard.KEY_A))
-            position.x -=  cameraSpeed;
+            position.x -=  cameraSpeed*deltaTime;
         if (Keyboard.isKeyDown(Keyboard.KEY_S))
-            position.z +=  cameraSpeed;
+            position.z +=  cameraSpeed*deltaTime;
         if (Keyboard.isKeyDown(Keyboard.KEY_SPACE))
-            position.y +=  cameraSpeed;
+            position.y +=  cameraSpeed*deltaTime;
         if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL))
-            position.y -=  cameraSpeed;
+            position.y -=  cameraSpeed*deltaTime;
     }
 
-    public void Rotate(){
+    public void Rotate(float deltaTime){
         if (Keyboard.isKeyDown(Keyboard.KEY_UP))
-            pitch -=  rotationSpeed;
+            pitch -=  rotationSpeed*deltaTime;
         if (Keyboard.isKeyDown(Keyboard.KEY_DOWN))
-            pitch +=  rotationSpeed;
+            pitch +=  rotationSpeed*deltaTime;
         if (Keyboard.isKeyDown(Keyboard.KEY_LEFT))
-            yaw -=  rotationSpeed;
+            yaw -=  rotationSpeed*deltaTime;
         if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT))
-            yaw +=  rotationSpeed;
+            yaw +=  rotationSpeed*deltaTime;
     }
 
     public Vector3f getPosition() {

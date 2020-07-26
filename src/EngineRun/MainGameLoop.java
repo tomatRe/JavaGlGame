@@ -25,7 +25,7 @@ public class MainGameLoop {
 
         //FPS INFO
         int fps = 0;
-        float timePerFrame = 0;
+        float deltaTime = 0;
         float totalTime = 0;
 
         //ESENTIALS
@@ -64,24 +64,24 @@ public class MainGameLoop {
 
         for (int i = 0; i < numOfFerns; i++){
             Random rnd = new Random();
-            Vector3f pos = new Vector3f(rnd.nextFloat()*100, 0, rnd.nextFloat()*100);
+            Vector3f pos = new Vector3f(rnd.nextFloat()*1000, 0, rnd.nextFloat()*1000);
             Vector3f rot = new Vector3f(0, rnd.nextFloat()*360, 0);
 
             if (i%2 == 0){
-                Entity fern = new Entity(ferntextured, pos, rot, 0.05f);
+                Entity fern = new Entity(ferntextured, pos, rot, 1f);
                 mapEntities.add(fern);
             }
             else{
-                Entity grass = new Entity(grassTextured,pos,rot, 0.1f);
+                Entity grass = new Entity(grassTextured,pos,rot, 1f);
                 mapEntities.add(grass);
             }
         }
 
         for (int i = 0; i < numOfTrees; i++){
             Random rnd = new Random();
-            Vector3f pos = new Vector3f(rnd.nextFloat()*100, 0, rnd.nextFloat()*100);
+            Vector3f pos = new Vector3f(rnd.nextFloat()*10000, 0, rnd.nextFloat()*10000);
             Vector3f rot = new Vector3f(0, rnd.nextFloat()*360, 0);
-            Entity tree = new Entity(treeTextured, pos, rot, 0.05f);
+            Entity tree = new Entity(treeTextured, pos, rot, 1f);
             mapEntities.add(tree);
         }
 
@@ -93,8 +93,8 @@ public class MainGameLoop {
             long beforeMS = System.currentTimeMillis();
 
             //CAMERA
-            camera.Move();
-            camera.Rotate();
+            camera.Move(deltaTime);
+            camera.Rotate(deltaTime);
 
             //SCENE
             for (Entity entity: mapEntities){
@@ -110,11 +110,11 @@ public class MainGameLoop {
 
             //FPS STATS
             if (showFps){
-                timePerFrame = (System.currentTimeMillis() - beforeMS);
-                timePerFrame /= 1000;
-                totalTime += timePerFrame;
+                deltaTime = (System.currentTimeMillis() - beforeMS);
+                deltaTime /= 1000;
+                totalTime += deltaTime;
                 if (totalTime >= 1){
-                    System.out.println(fps + " Fps - " + timePerFrame + " Ms");
+                    System.out.println(fps + " Fps - " + deltaTime + " Ms");
                     fps = 0;
                     totalTime = 0;
                 }

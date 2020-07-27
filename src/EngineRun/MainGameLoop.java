@@ -8,6 +8,8 @@ import RenderEngine.*;
 import Models.RawModel;
 import Terrains.Terrain;
 import Textures.ModelTexture;
+import Textures.TerrainTexture;
+import Textures.TerrainTexturePack;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -42,12 +44,18 @@ public class MainGameLoop {
         RawModel basicIcoModel = ObjLoader.LoadObjModel("basicIco", loader);
 
         //TEXTURES
-        ModelTexture terrainTexture = new ModelTexture(loader.LoadTexture("grass"));
         ModelTexture fernTexture = new ModelTexture(loader.LoadTexture("fern"));
         ModelTexture grassTexture = new ModelTexture(loader.LoadTexture("grassTexture"));
         ModelTexture treeTexture = new ModelTexture(loader.LoadTexture("lowPolyTree"));
-        terrainTexture.setShineDumper(10);
-        terrainTexture.setReflectivity(1);
+
+        //TERRAIN TEXTURES
+        TerrainTexture terrainBackgroundTexture = new TerrainTexture(loader.LoadTexture("grass"));
+        TerrainTexture terrainRTexture = new TerrainTexture(loader.LoadTexture("grassFlowers"));
+        TerrainTexture terrainGTexture = new TerrainTexture(loader.LoadTexture("mud"));
+        TerrainTexture terrainBTexture = new TerrainTexture(loader.LoadTexture("path"));
+        TerrainTexture terrainBlendmapTexture = new TerrainTexture(loader.LoadTexture("blendmap"));
+        TerrainTexturePack terrainTexturePack = new TerrainTexturePack
+                (terrainBackgroundTexture, terrainRTexture, terrainGTexture, terrainBTexture);
 
         //TEXTURED MODELS
         TexturedModel ferntextured = new TexturedModel(fernModel,fernTexture);
@@ -63,13 +71,13 @@ public class MainGameLoop {
 
         //SCENARY
         List<Entity> mapEntities = new ArrayList<>();
-        Terrain terrain = new Terrain(0,0, loader, terrainTexture);
+        Terrain terrain = new Terrain(0,0, loader, terrainTexturePack, terrainBlendmapTexture);
         int numOfFerns = 5000;
-        int numOfTrees = 5000;
+        int numOfTrees = 250;
 
         for (int i = 0; i < numOfFerns; i++){
             Random rnd = new Random();
-            Vector3f pos = new Vector3f(rnd.nextFloat()*1000, 0, rnd.nextFloat()*1000);
+            Vector3f pos = new Vector3f(rnd.nextFloat()*800, 0, rnd.nextFloat()*800);
             Vector3f rot = new Vector3f(0, rnd.nextFloat()*360, 0);
 
             if (i%2 == 0){
@@ -84,7 +92,7 @@ public class MainGameLoop {
 
         for (int i = 0; i < numOfTrees; i++){
             Random rnd = new Random();
-            Vector3f pos = new Vector3f(rnd.nextFloat()*10000, 0, rnd.nextFloat()*10000);
+            Vector3f pos = new Vector3f(rnd.nextFloat()*800, 0, rnd.nextFloat()*800);
             Vector3f rot = new Vector3f(0, rnd.nextFloat()*360, 0);
             Entity tree = new Entity(treeTextured, pos, rot, 1f);
             mapEntities.add(tree);
@@ -93,7 +101,7 @@ public class MainGameLoop {
 
         System.out.println("Finished Loading");
 
-        camera.SetRotation(new Vector3f(0,180,0));
+        camera.SetRotation(new Vector3f(0,140,0));//LOOK BACK pls
 
         while (!Display.isCloseRequested()){
             long beforeMS = System.currentTimeMillis();

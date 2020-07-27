@@ -37,6 +37,10 @@ public abstract class ShaderProgram {
         return GL20.glGetUniformLocation(programID, uniformName);
     }
 
+    protected void LoadInt(int location, int value){
+        GL20.glUniform1i(location, value);
+    }
+
     protected void LoadFloat(int location, float value){
         GL20.glUniform1f(location, value);
     }

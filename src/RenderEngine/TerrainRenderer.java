@@ -1,11 +1,9 @@
 package RenderEngine;
 
-import Entities.Entity;
 import Models.RawModel;
-import Models.TexturedModel;
 import Shaders.TerrainShader;
 import Terrains.Terrain;
-import Textures.ModelTexture;
+import Textures.TerrainTexturePack;
 import ToolBox.Maths;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
@@ -24,6 +22,7 @@ public class TerrainRenderer {
         this.shader = shader;
         shader.Start();
         shader.LoadProjectionMatrix(projectionMatrix);
+        shader.ConnectTextureUnits();
         shader.Stop();
     }
 
@@ -49,10 +48,29 @@ public class TerrainRenderer {
         GL20.glEnableVertexAttribArray(1);
         GL20.glEnableVertexAttribArray(2);
 
-        ModelTexture texture = terrain.getTexture();
-        shader.LoadShineVariables(texture.getShineDumper(), texture.getReflectivity());
+        BindTextures(terrain);
+        shader.LoadShineVariables(1, 0);//TODO
+    }
+
+    private void BindTextures(Terrain terrain){
+        TerrainTexturePack terrainTexturePack = terrain.getTexturePack();
+
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getID());
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, terrainTexturePack.getBackgroundTexture().getTextureID());
+
+        GL13.glActiveTexture(GL13.GL_TEXTURE1);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, terrainTexturePack.getrTexture().getTextureID());
+
+        GL13.glActiveTexture(GL13.GL_TEXTURE2);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, terrainTexturePack.getgTexture().getTextureID());
+
+        GL13.glActiveTexture(GL13.GL_TEXTURE3);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, terrainTexturePack.getbTexture().getTextureID());
+
+        GL13.glActiveTexture(GL13.GL_TEXTURE4);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, terrain.getBlendMap().getTextureID());
+
+
     }
 
     private void UnbindTexturedModel(){

@@ -2,6 +2,7 @@ package Entities;
 
 import Models.TexturedModel;
 import RenderEngine.DisplayManager;
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -11,8 +12,10 @@ public class Player extends Entity {
     private static final float MOVE_SPEED = 20;
     private static final float RUN_SPEED = 40;
     private static  final float TURN_SPEED = 160;
+
     private float currentSpeed = 0;
     private float currentTurnSpeed = 0;
+
     private Vector3f forwardVector;
     private Vector3f moveDirection = new Vector3f();
 
@@ -22,15 +25,24 @@ public class Player extends Entity {
     }
 
     private void CheckInputs(){
+        deltaTime = DisplayManager.GetFrameTimeSeconds();
 
         if (Keyboard.isKeyDown(Keyboard.KEY_W))
-            moveDirection.x = MOVE_SPEED * deltaTime;
+            currentSpeed = MOVE_SPEED * deltaTime;
+            //moveDirection.x = MOVE_SPEED * deltaTime;
         else if (Keyboard.isKeyDown(Keyboard.KEY_W) && Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
-            moveDirection.x = RUN_SPEED * deltaTime;
+            currentSpeed = RUN_SPEED * deltaTime;
         else if (Keyboard.isKeyDown(Keyboard.KEY_S))
-            moveDirection.x = -MOVE_SPEED * deltaTime;
+            currentSpeed = -MOVE_SPEED * deltaTime;
         else
-            moveDirection.x = 0;
+            currentSpeed = 0;
+
+        if (Keyboard.isKeyDown(Keyboard.KEY_D))
+            currentTurnSpeed = -TURN_SPEED * deltaTime;
+        else if (Keyboard.isKeyDown(Keyboard.KEY_A))
+            currentTurnSpeed = TURN_SPEED * deltaTime;
+        else
+            currentTurnSpeed = 0;
 
         /*
         if (Keyboard.isKeyDown(Keyboard.KEY_D))
@@ -46,14 +58,24 @@ public class Player extends Entity {
             Crouch();
     }
 
-    public void Move(){
+    public void Move(){/*
         deltaTime = DisplayManager.GetFrameTimeSeconds();
         Vector3f currentRotation = super.getRotation();
         CheckInputs();
         float dx = (float) (moveDirection.x * Math.sin(Math.toRadians(currentRotation.y)));
         float dz = (float) (moveDirection.x * Math.cos(Math.toRadians(currentRotation.y)));
         
-        super.IncreasePosition(dx, 0, dz);
+        super.IncreasePosition(dx, 0, dz);*/
+
+        CheckInputs();
+
+        float dx = currentSpeed * (float) Math.sin(
+                Math.toRadians(super.getRotation().y));
+        float dz = currentSpeed * (float) Math.cos(
+                Math.toRadians(super.getRotation().y));
+
+        super.IncreaseRotation(0, currentTurnSpeed, 0);
+        super.IncreasePosition(dx,0,dz);
     }
 
     private void Jump(){

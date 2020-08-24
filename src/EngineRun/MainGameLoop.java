@@ -3,6 +3,7 @@ package EngineRun;
 import Entities.Camera;
 import Entities.Entity;
 import Entities.Light;
+import Entities.Player;
 import Models.TexturedModel;
 import RenderEngine.*;
 import Models.RawModel;
@@ -24,12 +25,6 @@ public class MainGameLoop {
     static final boolean showFps = true;
 
     public static void main(String[] args){
-
-        //FPS INFO
-        int fps = 0;
-        float deltaTime = 0;
-        float totalTime = 0;
-
         //ESENTIALS
         DisplayManager.CreateDisplay();
         Loader loader = new Loader();
@@ -99,16 +94,18 @@ public class MainGameLoop {
         }
         Entity lightIco = new Entity(icoTextured, lightPosition, new Vector3f(0,0,0), 1);
 
+        //PLAYER
+        Player player = new Player(icoTextured, new Vector3f(0,0,0), new Vector3f(0,0,0), 1);
+        mapEntities.add(player);
+
         System.out.println("Finished Loading");
 
         camera.SetRotation(new Vector3f(0,140,0));//LOOK BACK pls
 
         while (!Display.isCloseRequested()){
-            long beforeMS = System.currentTimeMillis();
-
             //CAMERA
-            camera.Move(deltaTime);
-            camera.Rotate(deltaTime);
+            camera.Move(DisplayManager.GetFrameTimeSeconds());
+            camera.Rotate(DisplayManager.GetFrameTimeSeconds());
 
             //SCENE
             for (Entity entity: mapEntities){
@@ -117,25 +114,14 @@ public class MainGameLoop {
             renderer.ProcessEntity(lightIco);
             renderer.ProcessTerrain(terrain);
 
+            //PLAYER
+            player.Move();
+
             //RENDERER
             renderer.Render(light, camera);
 
             //UPDATE FRAME
             DisplayManager.UpdateDisplay();
-
-            //FPS STATS
-            if (showFps){
-                deltaTime = (System.currentTimeMillis() - beforeMS);
-                deltaTime /= 1000;
-                totalTime += deltaTime;
-                if (totalTime >= 1){
-                    System.out.println(fps + " Fps - " + deltaTime + " Ms");
-                    fps = 0;
-                    totalTime = 0;
-                }
-                else
-                    fps++;
-            }
         }
 
         renderer.CleanUp();

@@ -1,6 +1,7 @@
 package Entities;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
 public class Camera {
@@ -16,13 +17,13 @@ public class Camera {
     }
 
     public void Move(float deltaTime){
-        if (Keyboard.isKeyDown(Keyboard.KEY_W))
+        if (Keyboard.isKeyDown(Keyboard.KEY_I))
             position.z -=  cameraSpeed*deltaTime;
-        if (Keyboard.isKeyDown(Keyboard.KEY_D))
+        if (Keyboard.isKeyDown(Keyboard.KEY_L))
             position.x +=  cameraSpeed*deltaTime;
-        if (Keyboard.isKeyDown(Keyboard.KEY_A))
+        if (Keyboard.isKeyDown(Keyboard.KEY_J))
             position.x -=  cameraSpeed*deltaTime;
-        if (Keyboard.isKeyDown(Keyboard.KEY_S))
+        if (Keyboard.isKeyDown(Keyboard.KEY_K))
             position.z +=  cameraSpeed*deltaTime;
         if (Keyboard.isKeyDown(Keyboard.KEY_SPACE))
             position.y +=  cameraSpeed*deltaTime;

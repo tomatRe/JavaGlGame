@@ -12,9 +12,16 @@ public class Player extends Entity {
     private static final float MOVE_SPEED = 20;
     private static final float RUN_SPEED = 40;
     private static  final float TURN_SPEED = 160;
+    private static final float GRAVITY = -9.8f;
+    private static final float JUMP_POWER = 1;
+
+    //this is temporal
+    private static final float TERRAIN_HEIGHT = 0;
 
     private float currentSpeed = 0;
     private float currentTurnSpeed = 0;
+    private float upwardSpeed = 0;
+    private boolean isInAir = false;
 
     private Vector3f forwardVector;
     private Vector3f moveDirection = new Vector3f();
@@ -74,12 +81,24 @@ public class Player extends Entity {
         float dz = currentSpeed * (float) Math.cos(
                 Math.toRadians(super.getRotation().y));
 
+        upwardSpeed += GRAVITY * deltaTime;
+
         super.IncreaseRotation(0, currentTurnSpeed, 0);
-        super.IncreasePosition(dx,0,dz);
+        super.IncreasePosition(dx,upwardSpeed,dz);
+
+        if (super.getPosition().y < TERRAIN_HEIGHT){
+            upwardSpeed = 0;
+            isInAir = false;
+            super.getPosition().y = TERRAIN_HEIGHT;
+        }
     }
 
     private void Jump(){
-        //TODO
+        if (!isInAir){
+            this.upwardSpeed = JUMP_POWER;
+            isInAir = true;
+        }
+
     }
 
     private void Crouch(){

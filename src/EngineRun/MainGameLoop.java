@@ -25,10 +25,9 @@ public class MainGameLoop {
     static final boolean showFps = true;
 
     public static void main(String[] args){
-        //ESENTIALS
+        //ESSENTIALS
         DisplayManager.CreateDisplay();
         Loader loader = new Loader();
-        Camera camera = new Camera();
         Light light = new Light(lightPosition, lightColor);
         MasterRenderer renderer = new MasterRenderer();
 
@@ -97,6 +96,9 @@ public class MainGameLoop {
         //PLAYER
         Player player = new Player(icoTextured, new Vector3f(0,0,0), new Vector3f(0,0,0), 1);
         mapEntities.add(player);
+
+        //CAMERA
+        Camera camera = new Camera(player);
 
         System.out.println("Finished Loading");
 

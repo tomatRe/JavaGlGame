@@ -1,6 +1,7 @@
 package RenderEngine;
 
 import org.lwjgl.Sys;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.*;
 
 public class DisplayManager {
@@ -25,6 +26,9 @@ public class DisplayManager {
             Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
             Display.create(new PixelFormat(), attribs);
             Display.setTitle("JavaGlGame");
+
+            Mouse.create();
+            Mouse.setGrabbed(true);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -64,5 +68,6 @@ public class DisplayManager {
 
     public static void CloseDisplay(){
         Display.destroy();
+        Mouse.destroy();
     }
 }

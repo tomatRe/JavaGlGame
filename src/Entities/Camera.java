@@ -1,5 +1,6 @@
 package Entities;
 
+import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Matrix4f;
@@ -18,8 +19,10 @@ public class Camera {
     private float roll;
     private final float cameraSpeed = 60f;
     private final float rotationSpeed = 100f;
+    private final float cameraHeight = 10;
 
     public Player player;
+    public float mouseSensitivity = 0.1f;
 
     public Camera(){
         hasPlayer = false;
@@ -34,7 +37,7 @@ public class Camera {
         //ESSENTIALS TO FOLLOW PLAYER
         CalculateZoom();
         CalculatePitch();
-        CalculateAngleArroundPlayer();
+        //CalculateAngleArroundPlayer();
         float horizontalDistance = CalculateHorizontalDistance();
         float verticalDistance = CalculateVerticalDistance();
         CalculateCameraPosition(horizontalDistance, verticalDistance);
@@ -71,17 +74,23 @@ public class Camera {
     }
 
     public void CalculateZoom(){
-        float zoomLevel = Mouse.getDWheel() *0.1f;
+        float zoomLevel = Mouse.getDWheel() * mouseSensitivity;
         distanceFromPlayer -= zoomLevel;
     }
 
     private void CalculatePitch(){
-        float pitchChange = Mouse.getDY() * 0.1f;
+        float pitchChange = Mouse.getDY() * mouseSensitivity;
         pitch -= pitchChange;
+
+        if (pitch >= 85){
+            pitch = 84.99f;
+        }
+        if (pitch<= 1)
+            pitch = 1.01f;
     }
 
     private void CalculateAngleArroundPlayer(){
-        float angleChange = Mouse.getDX() * 0.3f;
+        float angleChange = Mouse.getDX() * mouseSensitivity;
         angleArroundPlayer += angleChange;
     }
 
@@ -131,5 +140,13 @@ public class Camera {
 
     public float getRoll() {
         return roll;
+    }
+
+    public float getMouseSensitivity() {
+        return mouseSensitivity;
+    }
+
+    public void setMouseSensitivity(float mouseSensitivity) {
+        this.mouseSensitivity = mouseSensitivity;
     }
 }

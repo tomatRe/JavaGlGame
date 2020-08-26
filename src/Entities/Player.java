@@ -13,16 +13,13 @@ public class Player extends Entity {
 
     private static float deltaTime = DisplayManager.GetFrameTimeSeconds();
     private static final float MOVE_SPEED = 20;
-    private static final float RUN_SPEED = 40;
-    private static final float TURN_SPEED = 160;
+    private static final float RUN_SPEED = 100;
     private static final float GRAVITY = -2f;
     private static final float JUMP_POWER = 0.5f;
 
     //this is temporal
-    private static final float TERRAIN_HEIGHT = 0;
+    private static final float TERRAIN_HEIGHT = 1;
 
-    private float currentSpeed = 0;
-    private float currentLateralSpeed = 0;
     private float currentTurnSpeed = 0;
     private float upwardSpeed = 0;
     private boolean isInAir = false;
@@ -32,7 +29,6 @@ public class Player extends Entity {
 
     public Player(TexturedModel model, Vector3f position, Vector3f rotation, float scale) {
         super(model, position, rotation, scale);
-        //forwardVector = new Vector3f()
     }
 
     private void CheckInputs(){
@@ -40,25 +36,24 @@ public class Player extends Entity {
 
         // FORWARDS / BACKWARDS
         if (Keyboard.isKeyDown(Keyboard.KEY_W))
-            currentSpeed = MOVE_SPEED * deltaTime;
-            //moveDirection.x = MOVE_SPEED * deltaTime;
+            moveDirection.x = MOVE_SPEED * deltaTime;
         else if (Keyboard.isKeyDown(Keyboard.KEY_W) && Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
-            currentSpeed = RUN_SPEED * deltaTime;
+            moveDirection.x = RUN_SPEED * deltaTime;
         else if (Keyboard.isKeyDown(Keyboard.KEY_S))
-            currentSpeed = -MOVE_SPEED * deltaTime;
+            moveDirection.x = -MOVE_SPEED * deltaTime;
         else
-            currentSpeed = 0;
+            moveDirection.x = 0;
 
         // ROTATE
         currentTurnSpeed = -Mouse.getDX() * 0.1f;
 
         // LEFT / RIGHT
         if (Keyboard.isKeyDown(Keyboard.KEY_D))
-            currentLateralSpeed = -TURN_SPEED * deltaTime;
+            moveDirection.z = -MOVE_SPEED * deltaTime;
         else if (Keyboard.isKeyDown(Keyboard.KEY_A))
-            currentLateralSpeed = TURN_SPEED * deltaTime;
+            moveDirection.z = MOVE_SPEED * deltaTime;
         else
-            currentLateralSpeed = 0;
+            moveDirection.z = 0;
 
         if (Keyboard.isKeyDown(Keyboard.KEY_SPACE))
             Jump();
@@ -66,15 +61,15 @@ public class Player extends Entity {
             Crouch();
 
         if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
-            DisplayManager.CloseDisplay();
+            System.exit(0);
     }
 
     public void Move(){
         CheckInputs();
 
-        float dx = currentSpeed * (float) Math.sin(
+        float dx = moveDirection.x * (float) Math.sin(
                 Math.toRadians(super.getRotation().y));
-        float dz = currentSpeed * (float) Math.cos(
+        float dz = moveDirection.x * (float) Math.cos(
                 Math.toRadians(super.getRotation().y));
 
         upwardSpeed += GRAVITY * deltaTime;

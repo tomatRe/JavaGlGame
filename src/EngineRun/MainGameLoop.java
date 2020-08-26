@@ -102,8 +102,6 @@ public class MainGameLoop {
 
         System.out.println("Finished Loading");
 
-        camera.SetRotation(new Vector3f(0,140,0));//LOOK BACK pls
-
         while (!Display.isCloseRequested()){
             //CAMERA
             camera.Move(DisplayManager.GetFrameTimeSeconds());

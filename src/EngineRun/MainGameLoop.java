@@ -105,7 +105,6 @@ public class MainGameLoop {
         while (!Display.isCloseRequested()){
             //CAMERA
             camera.Move(DisplayManager.GetFrameTimeSeconds());
-            camera.Rotate(DisplayManager.GetFrameTimeSeconds());
 
             //SCENE
             for (Entity entity: mapEntities){

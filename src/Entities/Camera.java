@@ -36,15 +36,6 @@ public class Camera {
     }
 
     public void Move(float deltaTime){
-        //ESSENTIALS TO FOLLOW PLAYER
-        CalculateZoom();
-        CalculatePitch();
-        //CalculateAngleArroundPlayer();
-        float horizontalDistance = CalculateHorizontalDistance();
-        float verticalDistance = CalculateVerticalDistance();
-        CalculateCameraPosition(horizontalDistance, verticalDistance);
-        yaw = 180-player.getRotation().y;
-
         //FREE CAMERA MOVEMENT
         if (!hasPlayer){
             if (Keyboard.isKeyDown(Keyboard.KEY_I))
@@ -59,6 +50,17 @@ public class Camera {
                 position.y +=  cameraSpeed*deltaTime;
             if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL))
                 position.y -=  cameraSpeed*deltaTime;
+            Rotate(deltaTime);
+
+        }else{ //FOLLOW PLAYER MOVEMENT
+            //ESSENTIALS TO FOLLOW PLAYER
+            CalculateZoom();
+            CalculatePitch();
+            //CalculateAngleArroundPlayer();
+            float horizontalDistance = CalculateHorizontalDistance();
+            float verticalDistance = CalculateVerticalDistance();
+            CalculateCameraPosition(horizontalDistance, verticalDistance);
+            yaw = 180-player.getRotation().y;
         }
     }
 

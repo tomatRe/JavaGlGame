@@ -10,18 +10,18 @@ public class Camera {
 
     private boolean hasPlayer;
 
-    private static float minDistanceFromPlayer = 15;
-    private static float maxDistanceFromPlayer = 100;
+    private Vector3f position = new Vector3f(0,0,0);
     private float distanceFromPlayer = 30;
     private float angleArroundPlayer = 0;
-
-    private Vector3f position = new Vector3f(0,0,0);
     private float pitch;
     private float yaw;
     private float roll;
+
     private final float cameraSpeed = 60f;
     private final float rotationSpeed = 100f;
-    private final float cameraHeight = 10;
+    private final float cameraHeight = 1;
+    private static float minDistanceFromPlayer = 15;
+    private static float maxDistanceFromPlayer = 100;
 
     public Player player;
     public float mouseSensitivity = 0.1f;
@@ -119,7 +119,7 @@ public class Camera {
         float offsetZ = (float)(horizontalDistance * Math.cos(Math.toRadians(player.getRotation().y)));
 
         position.x = player.getPosition().x - offsetX;
-        position.y = player.getPosition().y + verticalDistance;
+        position.y = player.getPosition().y + verticalDistance + cameraHeight;
         position.z = player.getPosition().z - offsetZ;
     }
 

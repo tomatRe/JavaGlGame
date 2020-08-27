@@ -53,7 +53,6 @@ public class Camera {
             Rotate(deltaTime);
 
         }else{ //FOLLOW PLAYER MOVEMENT
-            //ESSENTIALS TO FOLLOW PLAYER
             CalculateZoom();
             CalculatePitch();
             //CalculateAngleArroundPlayer();

@@ -10,7 +10,9 @@ public class Camera {
 
     private boolean hasPlayer;
 
-    private float distanceFromPlayer = 50;
+    private static float minDistanceFromPlayer = 15;
+    private static float maxDistanceFromPlayer = 100;
+    private float distanceFromPlayer = 30;
     private float angleArroundPlayer = 0;
 
     private Vector3f position = new Vector3f(0,0,0);
@@ -74,8 +76,16 @@ public class Camera {
     }
 
     public void CalculateZoom(){
-        float zoomLevel = Mouse.getDWheel() * mouseSensitivity;
-        distanceFromPlayer -= zoomLevel;
+        if(distanceFromPlayer >= minDistanceFromPlayer && distanceFromPlayer <= maxDistanceFromPlayer){
+            float zoomLevel = Mouse.getDWheel() * mouseSensitivity;
+            distanceFromPlayer -= zoomLevel;
+        }
+        if (distanceFromPlayer < minDistanceFromPlayer){
+            distanceFromPlayer = minDistanceFromPlayer;
+        }
+        if (distanceFromPlayer > maxDistanceFromPlayer){
+            distanceFromPlayer = maxDistanceFromPlayer;
+        }
     }
 
     private void CalculatePitch(){

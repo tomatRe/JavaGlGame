@@ -65,7 +65,7 @@ public class MainGameLoop {
 
         //SCENARY
         List<Entity> mapEntities = new ArrayList<>();
-        Terrain terrain = new Terrain(0,0, loader, terrainTexturePack, terrainBlendmapTexture);
+        Terrain terrain = new Terrain(0,0, loader, terrainTexturePack, terrainBlendmapTexture, "heightmap");
         int numOfFerns = 5000;
         int numOfTrees = 250;
 

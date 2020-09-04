@@ -5,6 +5,7 @@ import RenderEngine.Loader;
 import Textures.ModelTexture;
 import Textures.TerrainTexture;
 import Textures.TerrainTexturePack;
+import org.lwjgl.util.vector.Vector3f;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -14,7 +15,7 @@ import java.io.IOException;
 public class Terrain {
 
     private static final float SIZE = 800;
-    private static final float MAX_HEIGHT = 400;
+    private static final float MAX_HEIGHT = 20;
     private static final float MAX_PIXEL_COLOUR = 256*256*256;
 
     private float x;
@@ -55,9 +56,12 @@ public class Terrain {
                 vertices[vertexPointer*3] = (float)j/((float)VERTEX_COUNT - 1) * SIZE;
                 vertices[vertexPointer*3+1] = getHeight(j,i,image);
                 vertices[vertexPointer*3+2] = (float)i/((float)VERTEX_COUNT - 1) * SIZE;
-                normals[vertexPointer*3] = 0;
-                normals[vertexPointer*3+1] = 1;
-                normals[vertexPointer*3+2] = 0;
+
+                Vector3f normal = CalculateNormal(j,i,image);
+                normals[vertexPointer * 3] = normal.x;
+                normals[vertexPointer * 3 + 1] = normal.y;
+                normals[vertexPointer * 3 + 2] = normal.z;
+
                 textureCoords[vertexPointer*2] = (float)j/((float)VERTEX_COUNT - 1);
                 textureCoords[vertexPointer*2+1] = (float)i/((float)VERTEX_COUNT - 1);
                 vertexPointer++;
@@ -82,7 +86,7 @@ public class Terrain {
     }
 
     private float getHeight(int x, int y, BufferedImage image){
-        if (x<0 || x>image.getHeight() || y<0 || y>image.getHeight())
+        if (x<0 || x>=image.getHeight() || y<0 || y>=image.getHeight())
             return 0;
 
         float height = image.getRGB(x,y);
@@ -92,6 +96,18 @@ public class Terrain {
         height *= MAX_HEIGHT;
 
         return  height;
+    }
+
+    private Vector3f CalculateNormal(int x, int y, BufferedImage image){
+        float heightL = getHeight(x-1,y,image);
+        float heightR = getHeight(x+1,y,image);
+        float heightD = getHeight(x,y-1,image);
+        float heightU = getHeight(x,y+1,image);
+
+        Vector3f normal = new Vector3f(heightL - heightR, 2f, heightD - heightU);
+        normal.normalise();
+
+        return normal;
     }
 
     public float getX() {

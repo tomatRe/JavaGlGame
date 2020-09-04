@@ -38,13 +38,13 @@ public class Camera {
     public void Move(float deltaTime){
         //FREE CAMERA MOVEMENT
         if (!hasPlayer){
-            if (Keyboard.isKeyDown(Keyboard.KEY_I))
+            if (Keyboard.isKeyDown(Keyboard.KEY_W))
                 position.z -=  cameraSpeed*deltaTime;
-            if (Keyboard.isKeyDown(Keyboard.KEY_L))
+            if (Keyboard.isKeyDown(Keyboard.KEY_D))
                 position.x +=  cameraSpeed*deltaTime;
-            if (Keyboard.isKeyDown(Keyboard.KEY_J))
+            if (Keyboard.isKeyDown(Keyboard.KEY_A))
                 position.x -=  cameraSpeed*deltaTime;
-            if (Keyboard.isKeyDown(Keyboard.KEY_K))
+            if (Keyboard.isKeyDown(Keyboard.KEY_S))
                 position.z +=  cameraSpeed*deltaTime;
             if (Keyboard.isKeyDown(Keyboard.KEY_SPACE))
                 position.y +=  cameraSpeed*deltaTime;

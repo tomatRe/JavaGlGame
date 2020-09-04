@@ -21,7 +21,7 @@ import java.util.Random;
 public class MainGameLoop {
 
     static final Vector3f lightColor = new Vector3f(1,1,1);
-    static final Vector3f lightPosition = new Vector3f(50,25,50);
+    static final Vector3f lightPosition = new Vector3f(400,500,400);
     static final boolean showFps = true;
 
     public static void main(String[] args){

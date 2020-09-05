@@ -118,7 +118,7 @@ public class MainGameLoop {
             renderer.ProcessTerrain(terrain);
 
             //PLAYER
-            player.Move();
+            player.Move(terrain);
 
             //RENDERER
             renderer.Render(light, camera);

@@ -69,9 +69,11 @@ public class MainGameLoop {
         int numOfFerns = 5000;
         int numOfTrees = 250;
 
-        for (int i = 0; i < numOfFerns; i++){
+        for (int i = 0; i < numOfFerns; i++){//SPAWN GRASS
             Random rnd = new Random();
-            Vector3f pos = new Vector3f(rnd.nextFloat()*800, 0, rnd.nextFloat()*800);
+            float posx = rnd.nextFloat()*800;
+            float posz = rnd.nextFloat()*800;
+            Vector3f pos = new Vector3f(posx, terrain.getHeight(posx,posz), posz);
             Vector3f rot = new Vector3f(0, rnd.nextFloat()*360, 0);
 
             if (i%2 == 0){
@@ -84,9 +86,11 @@ public class MainGameLoop {
             }
         }
 
-        for (int i = 0; i < numOfTrees; i++){
+        for (int i = 0; i < numOfTrees; i++){//SPAWN TREES
             Random rnd = new Random();
-            Vector3f pos = new Vector3f(rnd.nextFloat()*800, 0, rnd.nextFloat()*800);
+            float posx = rnd.nextFloat()*800;
+            float posz = rnd.nextFloat()*800;
+            Vector3f pos = new Vector3f(posx, terrain.getHeight(posx, posz), posz);
             Vector3f rot = new Vector3f(0, rnd.nextFloat()*360, 0);
             Entity tree = new Entity(treeTextured, pos, rot, 1f);
             mapEntities.add(tree);

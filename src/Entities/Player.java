@@ -2,6 +2,7 @@ package Entities;
 
 import Models.TexturedModel;
 import RenderEngine.DisplayManager;
+import Terrains.Terrain;
 import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
@@ -16,9 +17,7 @@ public class Player extends Entity {
     private static final float RUN_SPEED = 100;
     private static final float GRAVITY = -2f;
     private static final float JUMP_POWER = 0.5f;
-
-    //this is temporal
-    private static final float TERRAIN_HEIGHT = 1;
+    private static final float PLAYER_HEIGHT = 1;
 
     private float currentTurnSpeed = 0;
     private float upwardSpeed = 0;
@@ -64,7 +63,7 @@ public class Player extends Entity {
             System.exit(0);
     }
 
-    public void Move(){
+    public void Move(Terrain terrain){
         CheckInputs();
 
         float dx = moveDirection.x * (float) Math.sin(
@@ -77,10 +76,12 @@ public class Player extends Entity {
         super.IncreaseRotation(0, currentTurnSpeed, 0);
         super.IncreasePosition(dx,upwardSpeed,dz);
 
-        if (super.getPosition().y < TERRAIN_HEIGHT){
+        float terraomHeight = terrain.getHeight(super.getPosition().x, super.getPosition().z);
+
+        if (super.getPosition().y < terraomHeight + PLAYER_HEIGHT){
             upwardSpeed = 0;
             isInAir = false;
-            super.getPosition().y = TERRAIN_HEIGHT;
+            super.getPosition().y = terraomHeight + PLAYER_HEIGHT;
         }
     }
 

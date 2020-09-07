@@ -11,7 +11,10 @@ import Terrains.Terrain;
 import Textures.ModelTexture;
 import Textures.TerrainTexture;
 import Textures.TerrainTexturePack;
+import guis.GuiRenderer;
+import guis.GuiTexture;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import java.util.ArrayList;
@@ -30,6 +33,7 @@ public class MainGameLoop {
         Loader loader = new Loader();
         Light light = new Light(lightPosition, lightColor);
         MasterRenderer renderer = new MasterRenderer();
+        GuiRenderer guiRenderer = new GuiRenderer(loader);
 
         //MODELS
         RawModel fernModel = ObjLoader.LoadObjModel("fern", loader);
@@ -104,6 +108,12 @@ public class MainGameLoop {
         //CAMERA
         Camera camera = new Camera(player);
 
+        //HUD AND GUIS
+        List<GuiTexture> guis = new ArrayList<>();
+        GuiTexture hudTest = new GuiTexture(
+                loader.LoadTexture("deftext"), new Vector2f(0.5f,0.5f), new Vector2f(0.25f,0.25f));
+        guis.add(hudTest);
+
         System.out.println("Finished Loading");
 
         while (!Display.isCloseRequested()){
@@ -123,11 +133,15 @@ public class MainGameLoop {
             //RENDERER
             renderer.Render(light, camera);
 
+            //GUIS
+            guiRenderer.Render(guis);
+
             //UPDATE FRAME
             DisplayManager.UpdateDisplay();
         }
 
         renderer.CleanUp();
+        guiRenderer.CleanUp();
         loader.CleanUp();
         DisplayManager.CloseDisplay();
     }

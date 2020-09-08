@@ -20,6 +20,7 @@ public class StaticShader extends ShaderProgram{
     private int location_viewMatrix;
     private int location_lightPosition[];
     private int location_lightColour[];
+    private int location_attenuation[];
     private int location_shineDamper;
     private int location_refelectivity;
     private int location_useFakeLightning;
@@ -54,10 +55,12 @@ public class StaticShader extends ShaderProgram{
 
         location_lightPosition = new int[MAX_LIGHTS];
         location_lightColour = new int[MAX_LIGHTS];
+        location_attenuation = new int[MAX_LIGHTS];
 
         for (int i = 0; i < MAX_LIGHTS; i++){
             location_lightPosition[i] = super.GetUniformLocation("lightPosition["+i+"]");
             location_lightColour[i] = super.GetUniformLocation("lightColour["+i+"]");
+            location_attenuation[i] = super.GetUniformLocation("attenuation["+i+"]");
         }
     }
 
@@ -82,10 +85,12 @@ public class StaticShader extends ShaderProgram{
             if (i<lights.size()){
                 super.LoadVector(location_lightPosition[i], lights.get(i).getPosition());
                 super.LoadVector(location_lightColour[i], lights.get(i).getColour());
+                super.LoadVector(location_attenuation[i], lights.get(i).getAttenuation());
             }
             else{
                 super.LoadVector(location_lightPosition[i], new Vector3f(0,0,0));
                 super.LoadVector(location_lightColour[i], new Vector3f(0,0,0));
+                super.LoadVector(location_attenuation[i], new Vector3f(1,0,0));
             }
         }
     }

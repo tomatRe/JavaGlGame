@@ -23,7 +23,7 @@ import java.util.Random;
 
 public class MainGameLoop {
 
-    static final Vector3f sunColour = new Vector3f(1,1,1);
+    static final Vector3f sunColour = new Vector3f(0.5f,0.5f,0.5f);
     static final Vector3f sunPosition = new Vector3f(400,500,400);
     static final boolean showFps = true;
 

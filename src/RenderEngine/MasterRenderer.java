@@ -6,6 +6,7 @@ import Entities.Light;
 import Models.TexturedModel;
 import Shaders.StaticShader;
 import Shaders.TerrainShader;
+import Skybox.SkyboxRenderer;
 import Terrains.Terrain;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
@@ -34,11 +35,14 @@ public class MasterRenderer {
     private Map<TexturedModel, List<Entity>> entities = new HashMap<TexturedModel, List<Entity>>();
     private List<Terrain> terrains = new ArrayList<>();
 
-    public MasterRenderer() {
+    private SkyboxRenderer skyboxRenderer;
+
+    public MasterRenderer(Loader loader) {
         EnableCulling();
         CreateProjectionMatrix();
         entityRenderer = new EntityRenderer(shader, projectionMatrix);
         terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
+        skyboxRenderer = new SkyboxRenderer(loader, projectionMatrix);
     }
 
     public static void EnableCulling(){
@@ -70,6 +74,8 @@ public class MasterRenderer {
         shader.LoadViewMatrix(camera);
         entityRenderer.Render(entities);
         shader.Stop();
+
+        skyboxRenderer.Render(camera);
 
         terrains.clear();
         entities.clear();

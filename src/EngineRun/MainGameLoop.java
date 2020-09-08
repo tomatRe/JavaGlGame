@@ -31,7 +31,7 @@ public class MainGameLoop {
         //ESSENTIALS
         DisplayManager.CreateDisplay();
         Loader loader = new Loader();
-        MasterRenderer renderer = new MasterRenderer();
+        MasterRenderer renderer = new MasterRenderer(loader);
         GuiRenderer guiRenderer = new GuiRenderer(loader);
 
         //LIGHTS

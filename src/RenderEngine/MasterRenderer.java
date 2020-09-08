@@ -50,7 +50,7 @@ public class MasterRenderer {
         GL11.glDisable(GL11.GL_CULL_FACE);
     }
 
-    public void Render(Light sun, Camera camera){
+    public void Render(List<Light> lights, Camera camera){
         float skyR = SKY_COLOUR.x;
         float skyG = SKY_COLOUR.y;
         float skyB = SKY_COLOUR.z;
@@ -59,14 +59,14 @@ public class MasterRenderer {
 
         terrainShader.Start();
         terrainShader.LoadSkyColour(skyR, skyG, skyB);
-        terrainShader.LoadLight(sun);
+        terrainShader.LoadLights(lights);
         terrainShader.LoadViewMatrix(camera);
         terrainRenderer.Render(terrains);
         terrainShader.Stop();
 
         shader.Start();
         shader.LoadSkyColour(skyR, skyG, skyB);
-        shader.LoadLight(sun);
+        shader.LoadLights(lights);
         shader.LoadViewMatrix(camera);
         entityRenderer.Render(entities);
         shader.Stop();

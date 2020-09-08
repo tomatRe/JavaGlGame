@@ -6,7 +6,11 @@ import ToolBox.Maths;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
+import java.util.List;
+
 public class TerrainShader extends ShaderProgram{
+
+    private static final int MAX_LIGHTS = 4;
 
     private static final String VERTEX_FILE = "src/Shaders/TerrainVertexShader";
     private static final String FRAGMENT_FILE = "src/Shaders/TerrainFragmentShader";
@@ -14,8 +18,8 @@ public class TerrainShader extends ShaderProgram{
     private int location_transformationMatrix;
     private int location_projectionMatrix;
     private int location_viewMatrix;
-    private int location_lightPosition;
-    private int location_lightColour;
+    private int location_lightPosition[];
+    private int location_lightColour[];
     private int location_shineDamper;
     private int location_refelectivity;
     private int location_skyColour;
@@ -40,12 +44,6 @@ public class TerrainShader extends ShaderProgram{
         location_viewMatrix =
                 super.GetUniformLocation("viewMatrix");
 
-        location_lightPosition =
-                super.GetUniformLocation("lightPosition");
-
-        location_lightColour =
-                super.GetUniformLocation("lightColour");
-
         location_shineDamper =
                 super.GetUniformLocation("shineDamper");
 
@@ -69,6 +67,14 @@ public class TerrainShader extends ShaderProgram{
 
         location_blendmap =
                 super.GetUniformLocation("blendMap");
+
+        location_lightPosition = new int[MAX_LIGHTS];
+        location_lightColour = new int[MAX_LIGHTS];
+
+        for (int i = 0; i < MAX_LIGHTS; i++){
+            location_lightPosition[i] = super.GetUniformLocation("lightPosition["+i+"]");
+            location_lightColour[i] = super.GetUniformLocation("lightColour["+i+"]");
+        }
     }
 
     @Override
@@ -90,9 +96,17 @@ public class TerrainShader extends ShaderProgram{
         super.LoadVector(location_skyColour, new Vector3f(r,g,b));
     }
 
-    public void LoadLight(Light light){
-        super.LoadVector(location_lightPosition, light.getPosition());
-        super.LoadVector(location_lightColour, light.getColour());
+    public void LoadLights(List<Light> lights){
+        for (int i = 0; i < MAX_LIGHTS; i++){
+            if (i<lights.size()){
+                super.LoadVector(location_lightPosition[i], lights.get(i).getPosition());
+                super.LoadVector(location_lightColour[i], lights.get(i).getColour());
+            }else{
+                super.LoadVector(location_lightPosition[i], new Vector3f(0,0,0));
+                super.LoadVector(location_lightColour[i], new Vector3f(0,0,0));
+            }
+
+        }
     }
 
     public void LoadShineVariables(float damper, float reflectivity){

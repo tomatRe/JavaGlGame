@@ -23,17 +23,21 @@ import java.util.Random;
 
 public class MainGameLoop {
 
-    static final Vector3f lightColor = new Vector3f(1,1,1);
-    static final Vector3f lightPosition = new Vector3f(400,500,400);
+    static final Vector3f sunColour = new Vector3f(1,1,1);
+    static final Vector3f sunPosition = new Vector3f(400,500,400);
     static final boolean showFps = true;
 
     public static void main(String[] args){
         //ESSENTIALS
         DisplayManager.CreateDisplay();
         Loader loader = new Loader();
-        Light light = new Light(lightPosition, lightColor);
         MasterRenderer renderer = new MasterRenderer();
         GuiRenderer guiRenderer = new GuiRenderer(loader);
+
+        //LIGHTS
+        List<Light> lights = new ArrayList<>();
+        Light sun = new Light(sunPosition, sunColour);
+        lights.add(sun);
 
         //MODELS
         RawModel fernModel = ObjLoader.LoadObjModel("fern", loader);
@@ -99,7 +103,7 @@ public class MainGameLoop {
             Entity tree = new Entity(treeTextured, pos, rot, 1f);
             mapEntities.add(tree);
         }
-        Entity lightIco = new Entity(icoTextured, lightPosition, new Vector3f(0,0,0), 1);
+        Entity lightIco = new Entity(icoTextured, sunPosition, new Vector3f(0,0,0), 1);
 
         //PLAYER
         Player player = new Player(icoTextured, new Vector3f(0,0,0), new Vector3f(0,0,0), 1);
@@ -111,7 +115,7 @@ public class MainGameLoop {
         //HUD AND GUIS
         List<GuiTexture> guis = new ArrayList<>();
         GuiTexture hudTest = new GuiTexture(
-                loader.LoadTexture("deftext"), new Vector2f(0.5f,0.5f), new Vector2f(0.25f,0.25f));
+                loader.LoadTexture("deftext"), new Vector2f(-0.70f,0.85f), new Vector2f(0.25f,0.01f));
         guis.add(hudTest);
 
         System.out.println("Finished Loading");
@@ -131,7 +135,7 @@ public class MainGameLoop {
             player.Move(terrain);
 
             //RENDERER
-            renderer.Render(light, camera);
+            renderer.Render(lights, camera);
 
             //GUIS
             guiRenderer.Render(guis);

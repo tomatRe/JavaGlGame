@@ -22,7 +22,7 @@ public class MasterRenderer {
     private static final float FOV = 90;
     private static final float NEAR_PLANE = 0.1f;
     private static final float FAR_PLANE = 1000f;
-    private static final Vector4f SKY_COLOUR = new Vector4f(0.411764705f,0.776470588f,0.8f,1f);
+    private static final Vector4f SKY_COLOUR = new Vector4f(0.123f,0.156f,0.150f,1f);
 
     private Matrix4f projectionMatrix;
 

@@ -11,6 +11,7 @@ import Terrains.Terrain;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -60,6 +61,7 @@ public class MasterRenderer {
         float skyB = SKY_COLOUR.z;
 
         Prepare();
+        SortLights(lights, camera.getPosition());
 
         terrainShader.Start();
         terrainShader.LoadSkyColour(skyR, skyG, skyB);
@@ -124,6 +126,28 @@ public class MasterRenderer {
         projectionMatrix.m23 = -1;
         projectionMatrix.m32 = -((2 * NEAR_PLANE * FAR_PLANE)/frustum_lenght);
         projectionMatrix.m33 = 0;
+    }
+
+    private static List<Light> SortLights(List<Light> lights, Vector3f cameraPos){
+
+        Light sun = lights.get(0);
+
+        lights.sort((Light1, Light2) -> {
+            Vector3f dist1V = new Vector3f();
+            Vector3f dist2V = new Vector3f();
+
+            Vector3f.sub(Light1.getPosition(), cameraPos, dist1V);
+            Vector3f.sub(Light2.getPosition(), cameraPos, dist2V);
+
+            float Dist1 = dist1V.length();
+            float Dist2 = dist2V.length();
+
+            return Float.compare(Dist1, Dist2);
+        });
+
+        lights.add(0, sun);
+
+        return lights;
     }
 
     public void CleanUp(){

@@ -23,9 +23,28 @@ import java.util.Random;
 
 public class MainGameLoop {
 
-    static final Vector3f sunColour = new Vector3f(0.5f,0.5f,0.5f);
+    static final Vector3f sunColour = new Vector3f(0.25f,0.25f,0.25f);
     static final Vector3f sunPosition = new Vector3f(400,500,400);
     static final boolean showFps = true;
+
+    public static List<Light> GenerateRandomLights(List<Light> lights){
+        for (int i = 0; i < 1000; i++){
+            Random rnd = new Random();
+            Vector3f position = new Vector3f
+                    (rnd.nextFloat()*800, 5, rnd.nextFloat()*800);
+
+            Vector3f colour = new Vector3f
+                    (rnd.nextFloat()*1000, rnd.nextFloat()*1000, rnd.nextFloat()*1000);
+
+            Vector3f attenuation = new Vector3f
+                    (rnd.nextFloat()*50,rnd.nextFloat()*50,rnd.nextFloat()*50);
+
+            Light light = new Light(position, colour, attenuation);
+            lights.add(light);
+        }
+
+        return lights;
+    }
 
     public static void main(String[] args){
         //ESSENTIALS
@@ -37,7 +56,8 @@ public class MainGameLoop {
         //LIGHTS
         List<Light> lights = new ArrayList<>();
         Light sun = new Light(sunPosition, sunColour);
-        lights.add(sun);
+        GenerateRandomLights(lights);
+        lights.add(0,sun);
 
         //MODELS
         RawModel fernModel = ObjLoader.LoadObjModel("fern", loader);
@@ -118,11 +138,11 @@ public class MainGameLoop {
                 loader.LoadTexture("deftext"), new Vector2f(-0.70f,0.85f), new Vector2f(0.25f,0.01f));
         guis.add(hudTest);
 
-        System.out.println("Finished Loading");
+        System.out.println("Finished Loading...");
+        System.out.println("Entities: " + mapEntities.size());
+        System.out.println("Lights: " + lights.size());
 
         while (!Display.isCloseRequested()){
-            //CAMERA
-            camera.Move(DisplayManager.GetFrameTimeSeconds());
 
             //SCENE
             for (Entity entity: mapEntities){
@@ -130,6 +150,9 @@ public class MainGameLoop {
             }
             renderer.ProcessEntity(lightIco);
             renderer.ProcessTerrain(terrain);
+
+            //CAMERA
+            camera.Move(DisplayManager.GetFrameTimeSeconds());
 
             //PLAYER
             player.Move(terrain);

@@ -16,7 +16,6 @@ import guis.GuiTexture;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -27,7 +26,7 @@ public class MainGameLoop {
     static final Vector3f sunPosition = new Vector3f(400,500,400);
     static final boolean showFps = true;
 
-    public static List<Light> GenerateRandomLights(List<Light> lights){
+    private static List<Light> GenerateRandomLights(List<Light> lights){
         for (int i = 0; i < 60; i++){
             Random rnd = new Random();
             Vector3f position = new Vector3f
@@ -46,18 +45,9 @@ public class MainGameLoop {
         return lights;
     }
 
-    public static void main(String[] args){
-        //ESSENTIALS
-        DisplayManager.CreateDisplay();
-        Loader loader = new Loader();
-        MasterRenderer renderer = new MasterRenderer(loader);
-        GuiRenderer guiRenderer = new GuiRenderer(loader);
-
-        //LIGHTS
-        List<Light> lights = new ArrayList<>();
-        Light sun = new Light(sunPosition, sunColour);
-        GenerateRandomLights(lights);
-        lights.add(0,sun);
+    private static Terrain GenerateEntities(Loader loader, List<Entity> mapEntities){
+        int numOfFerns = 5000;
+        int numOfTrees = 250;
 
         //MODELS
         RawModel fernModel = ObjLoader.LoadObjModel("fern", loader);
@@ -91,11 +81,7 @@ public class MainGameLoop {
         grassTextured.getTexture().setHasTransparecy(true);
         icoTextured.getTexture().setUseFakeLightning(true);
 
-        //SCENARY
-        List<Entity> mapEntities = new ArrayList<>();
         Terrain terrain = new Terrain(0,0, loader, terrainTexturePack, terrainBlendmapTexture, "heightmap");
-        int numOfFerns = 5000;
-        int numOfTrees = 250;
 
         for (int i = 0; i < numOfFerns; i++){//SPAWN GRASS
             Random rnd = new Random();
@@ -124,8 +110,42 @@ public class MainGameLoop {
             mapEntities.add(tree);
         }
         Entity lightIco = new Entity(icoTextured, sunPosition, new Vector3f(0,0,0), 1);
+        mapEntities.add(lightIco);
+
+        return terrain;
+    }
+
+    private static void CleanUp
+            (MasterRenderer renderer, GuiRenderer guiRenderer, Loader loader){
+
+        renderer.CleanUp();
+        guiRenderer.CleanUp();
+        loader.CleanUp();
+        DisplayManager.CloseDisplay();
+    }
+
+    public static void main(String[] args){
+        //ESSENTIALS
+        DisplayManager.CreateDisplay();
+        Loader loader = new Loader();
+        MasterRenderer renderer = new MasterRenderer(loader);
+        GuiRenderer guiRenderer = new GuiRenderer(loader);
+
+        //LIGHTS
+        List<Light> lights = new ArrayList<>();
+        Light sun = new Light(sunPosition, sunColour);
+        GenerateRandomLights(lights);
+        lights.add(0,sun);
+
+        //SCENARY
+        List<Entity> mapEntities = new ArrayList<>();
+        Terrain terrain;
+        terrain = GenerateEntities(loader, mapEntities);
 
         //PLAYER
+        RawModel basicIcoModel = ObjLoader.LoadObjModel("basicIco", loader);
+        TexturedModel icoTextured = new TexturedModel(basicIcoModel);
+        icoTextured.getTexture().setUseFakeLightning(true);
         Player player = new Player(icoTextured, new Vector3f(0,0,0), new Vector3f(0,0,0), 1);
         mapEntities.add(player);
 
@@ -138,6 +158,7 @@ public class MainGameLoop {
                 loader.LoadTexture("deftext"), new Vector2f(-0.70f,0.85f), new Vector2f(0.25f,0.01f));
         guis.add(hudTest);
 
+        //FINISHED LOADING
         System.out.println("Finished Loading...");
         System.out.println("Entities: " + mapEntities.size());
         System.out.println("Lights: " + lights.size());
@@ -145,10 +166,8 @@ public class MainGameLoop {
         while (!Display.isCloseRequested()){
 
             //SCENE
-            for (Entity entity: mapEntities){
+            for (Entity entity: mapEntities)
                 renderer.ProcessEntity(entity);
-            }
-            renderer.ProcessEntity(lightIco);
             renderer.ProcessTerrain(terrain);
 
             //CAMERA
@@ -167,9 +186,6 @@ public class MainGameLoop {
             DisplayManager.UpdateDisplay();
         }
 
-        renderer.CleanUp();
-        guiRenderer.CleanUp();
-        loader.CleanUp();
-        DisplayManager.CloseDisplay();
+        CleanUp(renderer, guiRenderer, loader);
     }
 }

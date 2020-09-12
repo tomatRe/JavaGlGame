@@ -77,7 +77,7 @@ public class MasterRenderer {
         entityRenderer.Render(entities);
         shader.Stop();
 
-        skyboxRenderer.Render(camera);
+        skyboxRenderer.Render(camera, new Vector3f(skyR, skyG, skyB));
 
         terrains.clear();
         entities.clear();

@@ -28,7 +28,7 @@ public class MainGameLoop {
     static final boolean showFps = true;
 
     public static List<Light> GenerateRandomLights(List<Light> lights){
-        for (int i = 0; i < 1000; i++){
+        for (int i = 0; i < 60; i++){
             Random rnd = new Random();
             Vector3f position = new Vector3f
                     (rnd.nextFloat()*800, 5, rnd.nextFloat()*800);

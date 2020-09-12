@@ -131,6 +131,7 @@ public class MasterRenderer {
     private static List<Light> SortLights(List<Light> lights, Vector3f cameraPos){
 
         Light sun = lights.get(0);
+        lights.remove(0);
 
         lights.sort((Light1, Light2) -> {
             Vector3f dist1V = new Vector3f();

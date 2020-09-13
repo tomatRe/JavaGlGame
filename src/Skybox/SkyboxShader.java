@@ -18,6 +18,9 @@ public class SkyboxShader extends ShaderProgram{
 	private int location_projectionMatrix;
 	private int location_viewMatrix;
 	private int location_fogColour;
+	private int location_cubeMap;
+	private int location_cubeMap2;
+	private int location_blendFactor;
 	
 	public SkyboxShader() {
 		super(VERTEX_FILE, FRAGMENT_FILE);
@@ -40,12 +43,24 @@ public class SkyboxShader extends ShaderProgram{
 	public void LoadFogColour(Vector3f fogColour){
 		super.LoadVector(location_fogColour, fogColour);
 	}
+
+	public void ConnectTextureUnits(){
+		super.LoadInt(location_cubeMap,0);
+		super.LoadInt(location_cubeMap2,1);
+	}
+
+	public void LoadBlendFactor(float blendFactor){
+		super.LoadFloat(location_blendFactor, blendFactor);
+	}
 	
 	@Override
 	protected void GetAllUniformLocations() {
 		location_projectionMatrix = super.GetUniformLocation("projectionMatrix");
 		location_viewMatrix = super.GetUniformLocation("viewMatrix");
 		location_fogColour = super.GetUniformLocation("fogColour");
+		location_cubeMap = super.GetUniformLocation("cubeMap");
+		location_cubeMap2 = super.GetUniformLocation("cubeMap2");
+		location_blendFactor = super.GetUniformLocation("blendFactor");
 	}
 
 	@Override

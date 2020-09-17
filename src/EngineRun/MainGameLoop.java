@@ -22,9 +22,8 @@ import java.util.Random;
 
 public class MainGameLoop {
 
-    static final Vector3f sunColour = new Vector3f(0.25f,0.25f,0.25f);
-    static final Vector3f sunPosition = new Vector3f(400,500,400);
-    static final boolean showFps = true;
+    static final Vector3f sunColour = new Vector3f(0.75f,0.75f,1.25f);
+    static final Vector3f sunPosition = new Vector3f(1400,1500,1400);
 
     private static List<Light> GenerateRandomLights(List<Light> lights){
         for (int i = 0; i < 60; i++){

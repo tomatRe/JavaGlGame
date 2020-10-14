@@ -38,18 +38,20 @@ public class Camera {
     public void Move(float deltaTime){
         //FREE CAMERA MOVEMENT
         if (!hasPlayer){
+            Vector3f direction = new Vector3f();
             if (Keyboard.isKeyDown(Keyboard.KEY_W))
-                position.z -=  cameraSpeed*deltaTime;
+                direction.z -=  cameraSpeed*deltaTime;
             if (Keyboard.isKeyDown(Keyboard.KEY_D))
-                position.x +=  cameraSpeed*deltaTime;
+                direction.x +=  cameraSpeed*deltaTime;
             if (Keyboard.isKeyDown(Keyboard.KEY_A))
-                position.x -=  cameraSpeed*deltaTime;
+                direction.x -=  cameraSpeed*deltaTime;
             if (Keyboard.isKeyDown(Keyboard.KEY_S))
-                position.z +=  cameraSpeed*deltaTime;
+                direction.z +=  cameraSpeed*deltaTime;
             if (Keyboard.isKeyDown(Keyboard.KEY_SPACE))
-                position.y +=  cameraSpeed*deltaTime;
+                direction.y +=  cameraSpeed*deltaTime;
             if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL))
-                position.y -=  cameraSpeed*deltaTime;
+                direction.y -=  cameraSpeed*deltaTime;
+            moveFloatingCamera(direction);
             Rotate(deltaTime);
 
         }else{ //FOLLOW PLAYER MOVEMENT
@@ -61,6 +63,52 @@ public class Camera {
             CalculateCameraPosition(horizontalDistance, verticalDistance);
             yaw = 180-player.getRotation().y;
         }
+    }
+
+    private void moveFloatingCamera(Vector3f moveDirection){
+        float dx = 0;
+        float dy = 0;
+        float dz = 0;
+
+        //DIAGONAL MOVEMENT
+        if ((moveDirection.z > 0 || moveDirection.z < 0) &&
+                (moveDirection.x < 0 || moveDirection.x > 0)){
+
+            dx = moveDirection.x * (float) Math.sin(
+                    Math.toRadians(getYaw()));
+            dz = moveDirection.x * (float) Math.cos(
+                    Math.toRadians(getYaw()));
+
+
+            dx += moveDirection.z/2 * (float) Math.sin(
+                    Math.toRadians(getYaw() + 90));
+
+            dz += moveDirection.z/2 * (float) Math.cos(
+                    Math.toRadians(getYaw() + 90));
+        }
+        //FORWARD MOVEMENT
+        else if (moveDirection.x > 0 || moveDirection.x < 0){
+            dx = moveDirection.x * (float) Math.sin(
+                    Math.toRadians(getYaw()));
+            dz = moveDirection.x * (float) Math.cos(
+                    Math.toRadians(getYaw()));
+        }
+        // L/R MOVEMENT
+        else if (moveDirection.z < 0 || moveDirection.z > 0){
+            dx += moveDirection.z * (float) Math.sin(
+                    Math.toRadians(getYaw() + 90));
+
+            dz += moveDirection.z * (float) Math.cos(
+                    Math.toRadians(getYaw() + 90));
+        }
+
+        if (moveDirection.y < 0 || moveDirection.y > 0){
+            dy += moveDirection.y;
+        }
+
+        position.x += dx;
+        position.y += dy;
+        position.z += dz;
     }
 
     public void Rotate(float deltaTime){

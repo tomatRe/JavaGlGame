@@ -66,15 +66,18 @@ public class SkyboxRenderer {
     };
 
     private RawModel cube;
-    private int texture;
+    private int dayTexture;
     private int nightTexture;
     private SkyboxShader shader;
+    private boolean dayNightCycleEnabled = false;
     private float time = 0;
+    private int dayTime = 5;
+    private int nightTime = 5;
 
     public SkyboxRenderer(Loader loader, Matrix4f projextionMatrix){
         cube = loader.LoadtoVAO(VERTICES, 3);
-        texture = loader.LoadCubemap(TEXTURE_FILES);
-        nightTexture = loader.LoadCubemap(NIGHT_TEXTURE_FILES);
+        dayTexture = loader.LoadCubemap(TEXTURE_FILES);
+        //nightTexture = loader.LoadCubemap(NIGHT_TEXTURE_FILES);
         shader = new SkyboxShader();
         shader.Start();
         shader.ConnectTextureUnits();
@@ -89,7 +92,10 @@ public class SkyboxRenderer {
 
         GL30.glBindVertexArray(cube.getVaoID());
         GL20.glEnableVertexAttribArray(0);
-        BindTextures();
+
+        if (dayNightCycleEnabled)
+            BindTextures();
+
         GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, cube.getVertexCount());
         GL20.glDisableVertexAttribArray(0);
         GL30.glBindVertexArray(0);
@@ -102,20 +108,21 @@ public class SkyboxRenderer {
         int texture1;
         int texture2;
         float blendFactor;
-        if(time >= 0 && time < 5000){
+
+        if(time >= 0 && time < dayTime){
             texture1 = nightTexture;
             texture2 = nightTexture;
-            blendFactor = (time - 0)/(5000 - 0);
-        }else if(time >= 5000 && time < 8000){
+            blendFactor = (time - 0)/(dayTime);
+        }else if(time >= dayTime && time < nightTime){
             texture1 = nightTexture;
-            texture2 = texture;
-            blendFactor = (time - 5000)/(8000 - 5000);
-        }else if(time >= 8000 && time < 21000){
-            texture1 = texture;
-            texture2 = texture;
-            blendFactor = (time - 8000)/(21000 - 8000);
+            texture2 = dayTexture;
+            blendFactor = (time - dayTime)/(nightTime - dayTime);
+        }else if(time >= nightTime && time < 21000){
+            texture1 = dayTexture;
+            texture2 = dayTexture;
+            blendFactor = (time - nightTime)/(21000 - nightTime);
         }else{
-            texture1 = texture;
+            texture1 = dayTexture;
             texture2 = nightTexture;
             blendFactor = (time - 21000)/(24000 - 21000);
         }

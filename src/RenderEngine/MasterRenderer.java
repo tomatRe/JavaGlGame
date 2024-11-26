@@ -23,7 +23,7 @@ public class MasterRenderer {
     private static final float FOV = 90;
     private static final float NEAR_PLANE = 0.1f;
     private static final float FAR_PLANE = 1000f;
-    private static final Vector4f SKY_COLOUR = new Vector4f(0.123f,0.156f,0.150f,1f);
+    private static final Vector4f FOG_COLOUR = new Vector4f(0.8f,0.9f,0.9f,1f);
 
     private Matrix4f projectionMatrix;
 
@@ -56,9 +56,9 @@ public class MasterRenderer {
     }
 
     public void Render(List<Light> lights, Camera camera){
-        float skyR = SKY_COLOUR.x;
-        float skyG = SKY_COLOUR.y;
-        float skyB = SKY_COLOUR.z;
+        float skyR = FOG_COLOUR.x;
+        float skyG = FOG_COLOUR.y;
+        float skyB = FOG_COLOUR.z;
 
         Prepare();
         SortLights(lights, camera.getPosition());
@@ -102,10 +102,10 @@ public class MasterRenderer {
     }
 
     public void Prepare(){
-        float skyR = SKY_COLOUR.x;
-        float skyG = SKY_COLOUR.y;
-        float skyB = SKY_COLOUR.z;
-        float skyA = SKY_COLOUR.w;
+        float skyR = FOG_COLOUR.x;
+        float skyG = FOG_COLOUR.y;
+        float skyB = FOG_COLOUR.z;
+        float skyA = FOG_COLOUR.w;
 
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);

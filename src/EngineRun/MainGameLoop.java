@@ -149,10 +149,10 @@ public class MainGameLoop {
         TexturedModel icoTextured = new TexturedModel(basicIcoModel);
         icoTextured.getTexture().setUseFakeLightning(true);
         Player player = new Player(icoTextured, new Vector3f(0,0,0), new Vector3f(0,0,0), 1);
-        mapEntities.add(player);
+        //mapEntities.add(player);
 
         //CAMERA
-        Camera camera = new Camera(player);
+        Camera camera = new Camera();
 
         //HUD AND GUIS
         List<GuiTexture> guis = new ArrayList<>();

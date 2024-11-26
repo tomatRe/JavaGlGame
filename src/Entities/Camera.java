@@ -10,7 +10,7 @@ public class Camera {
 
     private boolean hasPlayer;
 
-    private Vector3f position = new Vector3f(0,0,0);
+    private Vector3f position = new Vector3f(0,100,0);
     private float distanceFromPlayer = 30;
     private float angleArroundPlayer = 0;
     private float pitch;
@@ -28,6 +28,7 @@ public class Camera {
 
     public Camera(){
         hasPlayer = false;
+        yaw = 180;
     }
 
     public Camera(Player player) {
@@ -40,19 +41,19 @@ public class Camera {
         if (!hasPlayer){
             Vector3f direction = new Vector3f();
             if (Keyboard.isKeyDown(Keyboard.KEY_W))
-                direction.z -=  cameraSpeed*deltaTime;
-            if (Keyboard.isKeyDown(Keyboard.KEY_D))
-                direction.x +=  cameraSpeed*deltaTime;
-            if (Keyboard.isKeyDown(Keyboard.KEY_A))
                 direction.x -=  cameraSpeed*deltaTime;
-            if (Keyboard.isKeyDown(Keyboard.KEY_S))
+            if (Keyboard.isKeyDown(Keyboard.KEY_D))
+                direction.z -=  cameraSpeed*deltaTime;
+            if (Keyboard.isKeyDown(Keyboard.KEY_A))
                 direction.z +=  cameraSpeed*deltaTime;
+            if (Keyboard.isKeyDown(Keyboard.KEY_S))
+                direction.x +=  cameraSpeed*deltaTime;
             if (Keyboard.isKeyDown(Keyboard.KEY_SPACE))
                 direction.y +=  cameraSpeed*deltaTime;
             if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL))
                 direction.y -=  cameraSpeed*deltaTime;
             moveFloatingCamera(direction);
-            Rotate(deltaTime);
+            Rotate();
 
         }else{ //FOLLOW PLAYER MOVEMENT
             CalculateZoom();
@@ -106,21 +107,15 @@ public class Camera {
             dy += moveDirection.y;
         }
 
-        position.x += dx;
+        position.x -= dx;
         position.y += dy;
         position.z += dz;
     }
 
-    public void Rotate(float deltaTime){
+    public void Rotate(){
         if (!hasPlayer){
-            if (Keyboard.isKeyDown(Keyboard.KEY_UP))
-                pitch -=  rotationSpeed*deltaTime;
-            if (Keyboard.isKeyDown(Keyboard.KEY_DOWN))
-                pitch +=  rotationSpeed*deltaTime;
-            if (Keyboard.isKeyDown(Keyboard.KEY_LEFT))
-                yaw -=  rotationSpeed*deltaTime;
-            if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT))
-                yaw +=  rotationSpeed*deltaTime;
+            pitch -= Mouse.getDY() * 0.1f;
+            yaw += Mouse.getDX() * 0.1f;
         }
     }
 

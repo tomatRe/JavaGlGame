@@ -103,11 +103,12 @@ public class MainGameLoop {
 
         for (int i = 0; i < numOfTrees; i++){//SPAWN TREES
             Random rnd = new Random();
+            float scale = rnd.nextFloat()+2;
             float posx = rnd.nextFloat()*800;
             float posz = rnd.nextFloat()*800;
             Vector3f pos = new Vector3f(posx, terrain.getHeight(posx, posz), posz);
             Vector3f rot = new Vector3f(0, rnd.nextFloat()*360, 0);
-            Entity tree = new Entity(treeTextured, pos, rot, 1f);
+            Entity tree = new Entity(treeTextured, pos, rot, scale);
             mapEntities.add(tree);
         }
         Entity lightIco = new Entity(icoTextured, sunPosition, new Vector3f(0,0,0), 1);

@@ -51,13 +51,13 @@ public class MainGameLoop {
         //MODELS
         RawModel fernModel = ObjLoader.LoadObjModel("fern", loader);
         RawModel grassModel = ObjLoader.LoadObjModel("grassModel", loader);
-        RawModel treeModel = ObjLoader.LoadObjModel("lowPolyTree", loader);
+        RawModel treeModel = ObjLoader.LoadObjModel("highPolyTree", loader);
         RawModel basicIcoModel = ObjLoader.LoadObjModel("basicIco", loader);
 
         //TEXTURES
         ModelTexture fernTexture = new ModelTexture(loader.LoadTexture("fern"));
         ModelTexture grassTexture = new ModelTexture(loader.LoadTexture("grassTexture"));
-        ModelTexture treeTexture = new ModelTexture(loader.LoadTexture("lowPolyTree"));
+        ModelTexture treeTexture = new ModelTexture(loader.LoadTexture("grassTexture"));
 
         //TERRAIN TEXTURES
         TerrainTexture terrainBackgroundTexture = new TerrainTexture(loader.LoadTexture("grass"));

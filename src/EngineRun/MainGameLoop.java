@@ -22,7 +22,7 @@ import java.util.Random;
 
 public class MainGameLoop {
 
-    static final Vector3f sunColour = new Vector3f(0.75f,0.75f,1.25f);
+    static final Vector3f sunColour = new Vector3f(1.5f,1.5f,1f);
     static final Vector3f sunPosition = new Vector3f(1400,1500,1400);
 
     private static List<Light> GenerateRandomLights(List<Light> lights){
@@ -79,6 +79,8 @@ public class MainGameLoop {
         grassTextured.getTexture().setUseFakeLightning(true);
         grassTextured.getTexture().setHasTransparecy(true);
         icoTextured.getTexture().setUseFakeLightning(true);
+        treeTextured.getTexture().setHasTransparecy(true);
+        treeTextured.getTexture().setUseFakeLightning(false);
 
         Terrain terrain = new Terrain(0,0, loader, terrainTexturePack, terrainBlendmapTexture, "heightmap");
 
@@ -133,7 +135,7 @@ public class MainGameLoop {
         //LIGHTS
         List<Light> lights = new ArrayList<>();
         Light sun = new Light(sunPosition, sunColour);
-        GenerateRandomLights(lights);
+        //GenerateRandomLights(lights);
         lights.add(0,sun);
 
         //SCENARY
@@ -155,7 +157,7 @@ public class MainGameLoop {
         List<GuiTexture> guis = new ArrayList<>();
         GuiTexture hudTest = new GuiTexture(
                 loader.LoadTexture("deftext"), new Vector2f(-0.70f,0.85f), new Vector2f(0.25f,0.01f));
-        guis.add(hudTest);
+        //guis.add(hudTest);
 
         //FINISHED LOADING
         System.out.println("Finished Loading...");

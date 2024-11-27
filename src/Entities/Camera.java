@@ -10,7 +10,7 @@ public class Camera {
 
     private boolean hasPlayer;
 
-    private Vector3f position = new Vector3f(0,100,0);
+    private Vector3f position = new Vector3f(0,0,0);
     private float distanceFromPlayer = 30;
     private float angleArroundPlayer = 0;
     private float pitch;
@@ -28,6 +28,7 @@ public class Camera {
 
     public Camera(){
         hasPlayer = false;
+        position.y = 100;
         yaw = 180;
     }
 

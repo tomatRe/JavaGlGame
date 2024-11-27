@@ -129,8 +129,9 @@ public class Level {
         terrains.add(terrain);
 
         //PLAYER
-        //icoTextured.getTexture().setUseFakeLightning(true);
-        //Player player = new Player(icoTextured, new Vector3f(0,0,0), new Vector3f(0,0,0), 1);
+        icoTextured.getTexture().setUseFakeLightning(true);
+        Player player = new Player(icoTextured, new Vector3f(0,0,0), new Vector3f(0,0,0), 1);
+        //camera.setPlayer(player);
         //players.add(player);
 
         System.out.println("Level Generation ended!");

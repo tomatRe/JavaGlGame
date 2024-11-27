@@ -52,6 +52,9 @@ public class Camera {
                 direction.y +=  cameraSpeed*deltaTime;
             if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL))
                 direction.y -=  cameraSpeed*deltaTime;
+            if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
+                System.exit(0);
+
             moveFloatingCamera(direction);
             Rotate();
 

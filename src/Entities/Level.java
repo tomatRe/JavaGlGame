@@ -150,7 +150,6 @@ public class Level {
     }
 
     public void EventTick(){
-        RenderLevel();
         UpdateEntities();
         UpdatePlayers();
         UpdateCamera();
@@ -162,7 +161,6 @@ public class Level {
         RenderPlayers();
         renderer.Render(lights, camera);
         guiRenderer.Render(guis);
-        DisplayManager.UpdateDisplay();
     }
 
     private void RenderTerrains(){

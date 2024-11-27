@@ -32,8 +32,8 @@ public class MainGameLoop {
 
         while (!Display.isCloseRequested()){
 
-            testLevel.EventTick();
             testLevel.RenderLevel();
+            testLevel.EventTick();
 
             //UPDATE FRAME
             DisplayManager.UpdateDisplay();

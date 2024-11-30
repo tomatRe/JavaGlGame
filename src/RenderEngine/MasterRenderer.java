@@ -23,10 +23,9 @@ public class MasterRenderer {
     private static final float FOV = 90;
     private static final float NEAR_PLANE = 0.1f;
     private static final float FAR_PLANE = 1000f;
-    private static final Vector4f FOG_COLOUR = new Vector4f(0.8f,0.9f,0.9f,1f);
 
     private Matrix4f projectionMatrix;
-
+    private Vector4f FOG_COLOUR = new Vector4f(0.8f,0.9f,0.9f,1f);
     private StaticShader shader = new StaticShader();
     private EntityRenderer entityRenderer;
 
@@ -158,5 +157,9 @@ public class MasterRenderer {
 
     public Matrix4f getProjectionMatrix(){
         return projectionMatrix;
+    }
+
+    public void setFogColour(Vector4f newColour){
+        this.FOG_COLOUR = newColour;
     }
 }

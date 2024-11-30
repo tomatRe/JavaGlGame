@@ -17,6 +17,7 @@ import Textures.TerrainTexturePack;
 import guis.GuiRenderer;
 import guis.GuiTexture;
 import org.lwjgl.util.vector.Vector3f;
+import org.lwjgl.util.vector.Vector4f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +41,8 @@ public class ForestLevel implements Level {
     // Make it pretty
     static final Vector3f sunColour = new Vector3f(1.5f,1.5f,1f);
     static final Vector3f sunPosition = new Vector3f(1400,1500,1400);
-    static final Vector3f FOG_COLOUR = new Vector3f(1.5f,1.5f,1f);
+
+    Vector4f FOG_COLOUR = new Vector4f(0.8f,0.9f,0.9f,1f);
 
     public ForestLevel(Loader loader, MasterRenderer renderer, GuiRenderer guiRenderer){
         this.loader = loader;
@@ -137,6 +139,8 @@ public class ForestLevel implements Level {
         Player player = new Player(icoTextured, new Vector3f(0,0,0), new Vector3f(0,0,0), 1);
         //camera.setPlayer(player);
         //players.add(player);
+
+        renderer.setFogColour(FOG_COLOUR);
 
         System.out.println("Level Generation ended!");
     }

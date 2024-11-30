@@ -1,5 +1,9 @@
-package Entities;
+package Level;
 
+import Entities.Camera;
+import Entities.Entity;
+import Entities.Light;
+import Entities.Player;
 import Models.RawModel;
 import Models.TexturedModel;
 import RenderEngine.DisplayManager;
@@ -18,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Level {
+public class ForestLevel implements Level {
 
     // Needed entities
     Camera camera;
@@ -38,7 +42,7 @@ public class Level {
     static final Vector3f sunPosition = new Vector3f(1400,1500,1400);
     static final Vector3f FOG_COLOUR = new Vector3f(1.5f,1.5f,1f);
 
-    public Level(Loader loader, MasterRenderer renderer, GuiRenderer guiRenderer){
+    public ForestLevel(Loader loader, MasterRenderer renderer, GuiRenderer guiRenderer){
         this.loader = loader;
         this.renderer = renderer;
         this.guiRenderer = guiRenderer;
@@ -54,7 +58,7 @@ public class Level {
         lights.add(0,sun);
     }
 
-    private void GenerateEntities(){
+    public void GenerateEntities(){
         int numOfFerns = 5000;
         int numOfTrees = 250;
 
@@ -163,33 +167,33 @@ public class Level {
         guiRenderer.Render(guis);
     }
 
-    private void RenderTerrains(){
+    public void RenderTerrains(){
         for (Terrain terrain: terrains)
             renderer.ProcessTerrain(terrain);
     }
 
-    private void RenderEntities(){
+    public void RenderEntities(){
         for (Entity entity: mapEntities)
             renderer.ProcessEntity(entity);
     }
 
-    private void RenderPlayers(){
+    public void RenderPlayers(){
         for (Player player: players)
             renderer.ProcessEntity(player);
     }
 
-    private void UpdatePlayers(){
+    public void UpdatePlayers(){
         for (Player player: players)
             player.Move(terrains.get(0));
 
         // TODO add support for multiple terrain collision
     }
 
-    private void UpdateEntities(){
+    public void UpdateEntities(){
         // TODO add tick for movable entities
     }
 
-    private void UpdateCamera(){
+    public void UpdateCamera(){
         camera.Move(DisplayManager.GetFrameTimeSeconds());
     }
 }

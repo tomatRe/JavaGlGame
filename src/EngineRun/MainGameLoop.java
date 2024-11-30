@@ -1,6 +1,6 @@
 package EngineRun;
 
-import Entities.*;
+import Level.*;
 import RenderEngine.*;
 import guis.GuiRenderer;
 import org.lwjgl.opengl.Display;
@@ -24,7 +24,7 @@ public class MainGameLoop {
         GuiRenderer guiRenderer = new GuiRenderer(loader);
 
         //Level
-        Level testLevel = new Level(loader, renderer, guiRenderer);
+        Level testLevel = new ForestLevel(loader, renderer, guiRenderer);
         testLevel.LoadLevel();
 
         //FINISHED LOADING

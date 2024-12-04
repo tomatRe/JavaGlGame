@@ -145,6 +145,7 @@ public class ForestLevel implements Level {
 
         //Water
         WaterTile water = new WaterTile(200, 200, 0);
+        water.SetTileSize(200);
         waterTiles.add(water);
 
         renderer.setFogColour(FOG_COLOUR);

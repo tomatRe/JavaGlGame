@@ -7,6 +7,7 @@ import Entities.Player;
 import RenderEngine.Loader;
 import RenderEngine.MasterRenderer;
 import Terrains.Terrain;
+import Water.WaterTile;
 import guis.GuiRenderer;
 import guis.GuiTexture;
 import org.lwjgl.util.vector.Vector3f;
@@ -26,6 +27,7 @@ public interface Level {
     List<Player> players = null;
     List<GuiTexture> guis = null;
     List<Terrain> terrains = null;
+    List<WaterTile> water = null;
 
     // Make it pretty
     Vector3f sunColour = new Vector3f(1.5f,1.5f,1f);
@@ -38,6 +40,7 @@ public interface Level {
     void RenderLevel();
     void RenderTerrains();
     void RenderEntities();
+    void RenderWater();
     void RenderPlayers();
     void UpdatePlayers();
     void UpdateEntities();

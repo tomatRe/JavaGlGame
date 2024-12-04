@@ -14,6 +14,7 @@ import Terrains.Terrain;
 import Textures.ModelTexture;
 import Textures.TerrainTexture;
 import Textures.TerrainTexturePack;
+import Water.WaterTile;
 import guis.GuiRenderer;
 import guis.GuiTexture;
 import org.lwjgl.util.vector.Vector3f;
@@ -37,6 +38,7 @@ public class ForestLevel implements Level {
     List<Player> players;
     List<GuiTexture> guis;
     List<Terrain> terrains;
+    List<WaterTile> waterTiles;
 
     // Make it pretty
     static final Vector3f sunColour = new Vector3f(1.5f,1.5f,1f);
@@ -55,6 +57,7 @@ public class ForestLevel implements Level {
         players = new ArrayList<>();
         guis = new ArrayList<>();
         terrains = new ArrayList<>();
+        waterTiles = new ArrayList<>();
 
         Light sun = new Light(sunPosition, sunColour);
         lights.add(0,sun);
@@ -140,6 +143,10 @@ public class ForestLevel implements Level {
         //camera.setPlayer(player);
         //players.add(player);
 
+        //Water
+        WaterTile water = new WaterTile(200, 200, 0);
+        waterTiles.add(water);
+
         renderer.setFogColour(FOG_COLOUR);
 
         System.out.println("Level Generation ended!");
@@ -155,6 +162,7 @@ public class ForestLevel implements Level {
         System.out.println("Players: " + players.size());
         System.out.println("Guis: " + guis.size());
         System.out.println("Terrains: " + terrains.size());
+        System.out.println("Water Plains: " + waterTiles.size());
     }
 
     public void EventTick(){
@@ -166,6 +174,7 @@ public class ForestLevel implements Level {
     public void RenderLevel(){
         RenderTerrains();
         RenderEntities();
+        RenderWater();
         RenderPlayers();
         renderer.Render(lights, camera);
         guiRenderer.Render(guis);
@@ -184,6 +193,12 @@ public class ForestLevel implements Level {
     public void RenderPlayers(){
         for (Player player: players)
             renderer.ProcessEntity(player);
+    }
+
+    @Override
+    public void RenderWater() {
+        for (WaterTile waterTile: waterTiles)
+            renderer.ProcessWater(waterTile);
     }
 
     public void UpdatePlayers(){

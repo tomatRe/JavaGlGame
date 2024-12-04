@@ -8,6 +8,9 @@ import Shaders.StaticShader;
 import Shaders.TerrainShader;
 import Skybox.SkyboxRenderer;
 import Terrains.Terrain;
+import Water.WaterRenderer;
+import Water.WaterShader;
+import Water.WaterTile;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
@@ -26,22 +29,26 @@ public class MasterRenderer {
 
     private Matrix4f projectionMatrix;
     private Vector4f FOG_COLOUR = new Vector4f(0.8f,0.9f,0.9f,1f);
-    private StaticShader shader = new StaticShader();
-    private EntityRenderer entityRenderer;
 
-    private TerrainRenderer terrainRenderer;
+    private StaticShader shader = new StaticShader();
     private TerrainShader terrainShader = new TerrainShader();
+    private WaterShader waterShader = new WaterShader();
+
+    private EntityRenderer entityRenderer;
+    private TerrainRenderer terrainRenderer;
+    private WaterRenderer waterRenderer;
+    private SkyboxRenderer skyboxRenderer;
 
     private Map<TexturedModel, List<Entity>> entities = new HashMap<TexturedModel, List<Entity>>();
     private List<Terrain> terrains = new ArrayList<>();
-
-    private SkyboxRenderer skyboxRenderer;
+    private List<WaterTile> water = new ArrayList<>();
 
     public MasterRenderer(Loader loader) {
         EnableCulling();
         CreateProjectionMatrix();
         entityRenderer = new EntityRenderer(shader, projectionMatrix);
         terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
+        waterRenderer = new WaterRenderer(loader, waterShader, projectionMatrix);
         skyboxRenderer = new SkyboxRenderer(loader, projectionMatrix);
     }
 
@@ -76,8 +83,13 @@ public class MasterRenderer {
         entityRenderer.Render(entities);
         shader.Stop();
 
+        waterShader.Start();
+        waterRenderer.Render(water, camera);
+        waterShader.Stop();
+
         skyboxRenderer.Render(camera, new Vector3f(skyR, skyG, skyB));
 
+        water.clear();
         terrains.clear();
         entities.clear();
     }
@@ -98,6 +110,10 @@ public class MasterRenderer {
 
     public void ProcessTerrain(Terrain terrain){
         terrains.add(terrain);
+    }
+
+    public void ProcessWater(WaterTile waterTile){
+        water.add(waterTile);
     }
 
     public void Prepare(){

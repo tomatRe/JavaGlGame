@@ -45,4 +45,5 @@ public interface Level {
     void UpdatePlayers();
     void UpdateEntities();
     void UpdateCamera();
+    void CleanUp();
 }

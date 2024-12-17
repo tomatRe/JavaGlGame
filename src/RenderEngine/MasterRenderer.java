@@ -13,6 +13,7 @@ import Water.WaterShader;
 import Water.WaterTile;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
@@ -45,6 +46,7 @@ public class MasterRenderer {
 
     public MasterRenderer(Loader loader) {
         EnableCulling();
+        EnableClipDistance();
         CreateProjectionMatrix();
         entityRenderer = new EntityRenderer(shader, projectionMatrix);
         terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
@@ -55,6 +57,10 @@ public class MasterRenderer {
     public static void EnableCulling(){
         GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glCullFace(GL11.GL_BACK);
+    }
+
+    public static void EnableClipDistance(){
+        GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
     }
 
     public static void DisableCulling(){
@@ -167,6 +173,7 @@ public class MasterRenderer {
     }
 
     public void CleanUp(){
+        waterShader.CleanUp();
         shader.CleanUp();
         terrainShader.CleanUp();
     }

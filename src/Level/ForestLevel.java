@@ -14,9 +14,11 @@ import Terrains.Terrain;
 import Textures.ModelTexture;
 import Textures.TerrainTexture;
 import Textures.TerrainTexturePack;
+import Water.WaterFrameBuffers;
 import Water.WaterTile;
 import guis.GuiRenderer;
 import guis.GuiTexture;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
@@ -39,6 +41,10 @@ public class ForestLevel implements Level {
     List<GuiTexture> guis;
     List<Terrain> terrains;
     List<WaterTile> waterTiles;
+
+    // Reflections
+    WaterFrameBuffers wfb;
+    GuiTexture reflection;
 
     // Make it pretty
     static final Vector3f sunColour = new Vector3f(1.5f,1.5f,1f);
@@ -148,6 +154,11 @@ public class ForestLevel implements Level {
         water.SetTileSize(200);
         waterTiles.add(water);
 
+        //Water reflection buffer
+        wfb = new WaterFrameBuffers();
+        reflection = new GuiTexture(wfb.getReflectionTexture(), new Vector2f(-0.75f, 0.75f), new Vector2f(0.25f, 0.25f));
+        guis.add(reflection);
+
         renderer.setFogColour(FOG_COLOUR);
 
         System.out.println("Level Generation ended!");
@@ -175,9 +186,10 @@ public class ForestLevel implements Level {
     public void RenderLevel(){
         RenderTerrains();
         RenderEntities();
-        RenderWater();
         RenderPlayers();
         renderer.Render(lights, camera);
+
+        RenderWater();
         guiRenderer.Render(guis);
     }
 
@@ -198,6 +210,13 @@ public class ForestLevel implements Level {
 
     @Override
     public void RenderWater() {
+        wfb.bindReflectionFrameBuffer();
+        RenderTerrains();
+        RenderEntities();
+        RenderPlayers();
+        renderer.Render(lights, camera);
+        wfb.unbindCurrentFrameBuffer();
+
         for (WaterTile waterTile: waterTiles)
             renderer.ProcessWater(waterTile);
     }
@@ -216,4 +235,22 @@ public class ForestLevel implements Level {
     public void UpdateCamera(){
         camera.Move(DisplayManager.GetFrameTimeSeconds());
     }
+
+    @Override
+    public void CleanUp() {
+        loader.CleanUp();
+        wfb.cleanUp();
+        guiRenderer.CleanUp();
+        renderer.CleanUp();
+
+        camera = null;
+        mapEntities = null;
+        lights = null;
+        players = null;
+        guis = null;
+        terrains = null;
+        waterTiles = null;
+    }
+
+
 }

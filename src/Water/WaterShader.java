@@ -7,8 +7,8 @@ import Entities.Camera;
 
 public class WaterShader extends ShaderProgram {
 
-	private final static String VERTEX_FILE = "src/water/waterVertex";
-	private final static String FRAGMENT_FILE = "src/water/waterFragment";
+	private final static String VERTEX_FILE = "src/water/waterVertex.glsl";
+	private final static String FRAGMENT_FILE = "src/water/waterFragment.glsl";
 
 	private int location_modelMatrix;
 	private int location_viewMatrix;

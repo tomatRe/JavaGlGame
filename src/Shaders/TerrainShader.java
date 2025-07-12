@@ -12,8 +12,8 @@ public class TerrainShader extends ShaderProgram{
 
     private static final int MAX_LIGHTS = 4;
 
-    private static final String VERTEX_FILE = "src/Shaders/TerrainVertexShader";
-    private static final String FRAGMENT_FILE = "src/Shaders/TerrainFragmentShader";
+    private static final String VERTEX_FILE = "src/Shaders/TerrainVertexShader.glsl";
+    private static final String FRAGMENT_FILE = "src/Shaders/TerrainFragmentShader.glsl";
 
     private int location_transformationMatrix;
     private int location_projectionMatrix;

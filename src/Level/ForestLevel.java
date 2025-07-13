@@ -43,7 +43,6 @@ public class ForestLevel implements Level {
     List<WaterTile> waterTiles;
 
     // Reflections
-    WaterFrameBuffers wfb;
     GuiTexture reflection;
 
     // Make it pretty
@@ -155,9 +154,9 @@ public class ForestLevel implements Level {
         waterTiles.add(water);
 
         //Water reflection buffer
-        wfb = new WaterFrameBuffers();
-        reflection = new GuiTexture(wfb.getReflectionTexture(), new Vector2f(-0.75f, 0.75f), new Vector2f(0.25f, 0.25f));
-        guis.add(reflection);
+        //WaterFrameBuffers wfb = new WaterFrameBuffers();
+        //reflection = new GuiTexture(wfb.getReflectionTexture(), new Vector2f(-0.75f, 0.75f), new Vector2f(0.25f, 0.25f));
+        //guis.add(reflection);
 
         renderer.setFogColour(FOG_COLOUR);
 
@@ -210,13 +209,6 @@ public class ForestLevel implements Level {
 
     @Override
     public void RenderWater() {
-        wfb.bindReflectionFrameBuffer();
-        RenderTerrains();
-        RenderEntities();
-        RenderPlayers();
-        renderer.Render(lights, camera);
-        wfb.unbindCurrentFrameBuffer();
-
         for (WaterTile waterTile: waterTiles)
             renderer.ProcessWater(waterTile);
     }
@@ -239,7 +231,6 @@ public class ForestLevel implements Level {
     @Override
     public void CleanUp() {
         loader.CleanUp();
-        wfb.cleanUp();
         guiRenderer.CleanUp();
         renderer.CleanUp();
 

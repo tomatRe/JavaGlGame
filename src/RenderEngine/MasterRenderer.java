@@ -8,6 +8,7 @@ import Shaders.StaticShader;
 import Shaders.TerrainShader;
 import Skybox.SkyboxRenderer;
 import Terrains.Terrain;
+import Water.WaterFrameBuffers;
 import Water.WaterRenderer;
 import Water.WaterShader;
 import Water.WaterTile;
@@ -31,26 +32,38 @@ public class MasterRenderer {
     private Matrix4f projectionMatrix;
     private Vector4f FOG_COLOUR = new Vector4f(0.8f,0.9f,0.9f,1f);
 
-    private StaticShader shader = new StaticShader();
-    private TerrainShader terrainShader = new TerrainShader();
-    private WaterShader waterShader = new WaterShader();
+    private StaticShader shader;
+    private TerrainShader terrainShader;
+    private WaterShader waterShader;
+
+    WaterFrameBuffers wfb;
 
     private EntityRenderer entityRenderer;
     private TerrainRenderer terrainRenderer;
     private WaterRenderer waterRenderer;
     private SkyboxRenderer skyboxRenderer;
 
-    private Map<TexturedModel, List<Entity>> entities = new HashMap<TexturedModel, List<Entity>>();
-    private List<Terrain> terrains = new ArrayList<>();
-    private List<WaterTile> water = new ArrayList<>();
+    private Map<TexturedModel, List<Entity>> entities;
+    private List<Terrain> terrains;
+    private List<WaterTile> water;
 
     public MasterRenderer(Loader loader) {
+
+        // Initialize everything
+        wfb = new WaterFrameBuffers();
+        shader = new StaticShader();
+        terrainShader = new TerrainShader();
+        waterShader = new WaterShader();
+        entities = new HashMap<TexturedModel, List<Entity>>();
+        terrains = new ArrayList<>();
+        water = new ArrayList<>();
+
         EnableCulling();
         EnableClipDistance();
         CreateProjectionMatrix();
         entityRenderer = new EntityRenderer(shader, projectionMatrix);
         terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
-        waterRenderer = new WaterRenderer(loader, waterShader, projectionMatrix);
+        waterRenderer = new WaterRenderer(loader, projectionMatrix, waterShader, wfb);
         skyboxRenderer = new SkyboxRenderer(loader, projectionMatrix);
     }
 
@@ -75,6 +88,7 @@ public class MasterRenderer {
         Prepare();
         SortLights(lights, camera.getPosition());
 
+        // Terrain rendering
         terrainShader.Start();
         terrainShader.LoadSkyColour(skyR, skyG, skyB);
         terrainShader.LoadLights(lights);
@@ -82,6 +96,7 @@ public class MasterRenderer {
         terrainRenderer.Render(terrains);
         terrainShader.Stop();
 
+        // Entity rendering
         shader.Start();
         shader.LoadSkyColour(skyR, skyG, skyB);
         shader.LoadLights(lights);
@@ -89,12 +104,32 @@ public class MasterRenderer {
         entityRenderer.Render(entities);
         shader.Stop();
 
+        // Skybox rendering
+        skyboxRenderer.Render(camera, new Vector3f(skyR, skyG, skyB));
+
+        // Water rendering
         waterShader.Start();
+        wfb.bindReflectionFrameBuffer();
+        terrainShader.Start();
+        terrainShader.LoadSkyColour(skyR, skyG, skyB);
+        terrainShader.LoadLights(lights);
+        terrainShader.LoadViewMatrix(camera);
+        terrainRenderer.Render(terrains);
+        terrainShader.Stop();
+        shader.Start();
+        shader.LoadSkyColour(skyR, skyG, skyB);
+        shader.LoadLights(lights);
+        shader.LoadViewMatrix(camera);
+        entityRenderer.Render(entities);
+        shader.Stop();
+        wfb.unbindCurrentFrameBuffer();
+        wfb.bindRefractionFrameBuffer();
+        skyboxRenderer.Render(camera, new Vector3f(skyR, skyG, skyB));
+        wfb.unbindCurrentFrameBuffer();
         waterRenderer.Render(water, camera);
         waterShader.Stop();
 
-        skyboxRenderer.Render(camera, new Vector3f(skyR, skyG, skyB));
-
+        // Cleanup
         water.clear();
         terrains.clear();
         entities.clear();
@@ -176,6 +211,7 @@ public class MasterRenderer {
         waterShader.CleanUp();
         shader.CleanUp();
         terrainShader.CleanUp();
+        wfb.cleanUp();
     }
 
     public Matrix4f getProjectionMatrix(){

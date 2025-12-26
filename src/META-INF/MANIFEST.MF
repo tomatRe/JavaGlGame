@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: EngineRun.MainGameLoop
+Class-Path: lwjgl.jar lwjgl_util.jar slick-util.jar PNGDecoder.jar
+

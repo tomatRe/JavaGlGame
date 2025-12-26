@@ -2,16 +2,12 @@ package Water;
 
 import java.nio.ByteBuffer;
 
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL14;
-import org.lwjgl.opengl.GL30;
-import org.lwjgl.opengl.GL32;
+import org.lwjgl.opengl.*;
 
 public class WaterFrameBuffers {
 
-	protected static final int REFLECTION_WIDTH = 160;
-	private static final int REFLECTION_HEIGHT = 90;
+	protected static final int REFLECTION_WIDTH = 1280;
+	private static final int REFLECTION_HEIGHT = 720;
 	
 	protected static final int REFRACTION_WIDTH = 1280;
 	private static final int REFRACTION_HEIGHT = 720;
@@ -67,6 +63,12 @@ public class WaterFrameBuffers {
 		reflectionFrameBuffer = createFrameBuffer();
 		reflectionTexture = createTextureAttachment(REFLECTION_WIDTH,REFLECTION_HEIGHT);
 		reflectionDepthBuffer = createDepthBufferAttachment(REFLECTION_WIDTH,REFLECTION_HEIGHT);
+
+		int status = GL30.glCheckFramebufferStatus(GL30.GL_FRAMEBUFFER);
+		if (status != GL30.GL_FRAMEBUFFER_COMPLETE) {
+			System.out.println("ERROR: Reflection Framebuffer is not complete! Status = " + status);
+		}
+
 		unbindCurrentFrameBuffer();
 	}
 	
@@ -74,13 +76,28 @@ public class WaterFrameBuffers {
 		refractionFrameBuffer = createFrameBuffer();
 		refractionTexture = createTextureAttachment(REFRACTION_WIDTH,REFRACTION_HEIGHT);
 		refractionDepthTexture = createDepthTextureAttachment(REFRACTION_WIDTH,REFRACTION_HEIGHT);
+
+		int status = GL30.glCheckFramebufferStatus(GL30.GL_FRAMEBUFFER);
+		if (status != GL30.GL_FRAMEBUFFER_COMPLETE) {
+			System.out.println("ERROR: Refraction Framebuffer is not complete! Status = " + status);
+		}
+
 		unbindCurrentFrameBuffer();
 	}
 	
 	private void bindFrameBuffer(int frameBuffer, int width, int height){
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);//To make sure the texture isn't bound
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, frameBuffer);
 		GL11.glViewport(0, 0, width, height);
+		GL11.glDrawBuffer(GL30.GL_COLOR_ATTACHMENT0);
+		GL30.glFramebufferTexture2D(
+				GL30.GL_FRAMEBUFFER,
+				GL30.GL_COLOR_ATTACHMENT0,
+				GL11.GL_TEXTURE_2D,
+				reflectionTexture,
+				0
+		);
+		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 	}
 
 	private int createFrameBuffer() {
@@ -96,12 +113,27 @@ public class WaterFrameBuffers {
 	private int createTextureAttachment( int width, int height) {
 		int texture = GL11.glGenTextures();
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
-		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGB, width, height,
-				0, GL11.GL_RGB, GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+
+		GL11.glTexImage2D(
+				GL11.GL_TEXTURE_2D,
+				0,
+				GL11.GL_RGBA8,
+				width, height,
+				0,
+				GL11.GL_RGBA,
+				GL11.GL_UNSIGNED_BYTE,
+				(java.nio.ByteBuffer) null
+		);
+
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-		GL32.glFramebufferTexture(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0,
-				texture, 0);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
+
+		// (Asegúrate fuera de aquí:)
+		// GL11.glDrawBuffer(GL30.GL_COLOR_ATTACHMENT0);
+		// GL11.glReadBuffer(GL30.GL_COLOR_ATTACHMENT0); // si lo necesitas
+
 		return texture;
 	}
 	

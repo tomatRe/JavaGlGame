@@ -10,7 +10,7 @@ uniform sampler2D refractionTexture;
 void main(void) {
 
 	vec4 reflectColour = texture(reflectionTexture, textureCoords);
-	vec4 refracttColour = texture(refractionTexture, textureCoords);
+	vec4 refractColour = texture(refractionTexture, textureCoords);
 
-	out_Color = mix(reflectColour, refracttColour, 0.5);
+	out_Color = texture(reflectionTexture, textureCoords);
 }

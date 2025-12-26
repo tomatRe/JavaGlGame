@@ -108,26 +108,29 @@ public class MasterRenderer {
         skyboxRenderer.Render(camera, new Vector3f(skyR, skyG, skyB));
 
         // Water rendering
-        waterShader.Start();
-        wfb.bindReflectionFrameBuffer();
-        terrainShader.Start();
-        terrainShader.LoadSkyColour(skyR, skyG, skyB);
-        terrainShader.LoadLights(lights);
-        terrainShader.LoadViewMatrix(camera);
-        terrainRenderer.Render(terrains);
-        terrainShader.Stop();
-        shader.Start();
-        shader.LoadSkyColour(skyR, skyG, skyB);
-        shader.LoadLights(lights);
-        shader.LoadViewMatrix(camera);
-        entityRenderer.Render(entities);
-        shader.Stop();
-        wfb.unbindCurrentFrameBuffer();
-        wfb.bindRefractionFrameBuffer();
-        skyboxRenderer.Render(camera, new Vector3f(skyR, skyG, skyB));
-        wfb.unbindCurrentFrameBuffer();
-        waterRenderer.Render(water, camera);
-        waterShader.Stop();
+        if (!water.isEmpty())
+        {
+            waterShader.Start();
+            wfb.bindReflectionFrameBuffer();
+            terrainShader.Start();
+            terrainShader.LoadSkyColour(skyR, skyG, skyB);
+            terrainShader.LoadLights(lights);
+            terrainShader.LoadViewMatrix(camera);
+            terrainRenderer.Render(terrains);
+            terrainShader.Stop();
+            shader.Start();
+            shader.LoadSkyColour(skyR, skyG, skyB);
+            shader.LoadLights(lights);
+            shader.LoadViewMatrix(camera);
+            entityRenderer.Render(entities);
+            shader.Stop();
+            wfb.unbindCurrentFrameBuffer();
+            //wfb.bindRefractionFrameBuffer();
+            //skyboxRenderer.Render(camera, new Vector3f(skyR, skyG, skyB));
+            //wfb.unbindCurrentFrameBuffer();
+            waterRenderer.Render(water, camera);
+            waterShader.Stop();
+        }
 
         // Cleanup
         water.clear();

@@ -124,10 +124,8 @@ public class MasterRenderer {
             shader.LoadViewMatrix(camera);
             entityRenderer.Render(entities);
             shader.Stop();
+            skyboxRenderer.Render(camera, new Vector3f(skyR, skyG, skyB));
             wfb.unbindCurrentFrameBuffer();
-            //wfb.bindRefractionFrameBuffer();
-            //skyboxRenderer.Render(camera, new Vector3f(skyR, skyG, skyB));
-            //wfb.unbindCurrentFrameBuffer();
             waterRenderer.Render(water, camera);
             waterShader.Stop();
         }

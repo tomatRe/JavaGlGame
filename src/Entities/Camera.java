@@ -41,7 +41,7 @@ public class Camera {
     // Copy constructor
     public Camera(Camera copyCamera) {
         this.hasPlayer = copyCamera.hasPlayer;
-        this.position = copyCamera.position;
+        this.position = new Vector3f(copyCamera.position);
         this.distanceFromPlayer = copyCamera.distanceFromPlayer;
         this.angleArroundPlayer = copyCamera.angleArroundPlayer;
         this.pitch = copyCamera.pitch;

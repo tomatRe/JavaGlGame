@@ -25,6 +25,7 @@ public class Camera {
 
     public Player player;
     public float mouseSensitivity = 0.1f;
+    public boolean canMove = true;
 
     public Camera(){
         hasPlayer = false;
@@ -37,36 +38,53 @@ public class Camera {
         hasPlayer = true;
     }
 
+    // Copy constructor
+    public Camera(Camera copyCamera) {
+        this.hasPlayer = copyCamera.hasPlayer;
+        this.position = copyCamera.position;
+        this.distanceFromPlayer = copyCamera.distanceFromPlayer;
+        this.angleArroundPlayer = copyCamera.angleArroundPlayer;
+        this.pitch = copyCamera.pitch;
+        this.yaw = copyCamera.yaw;
+        this.roll = copyCamera.roll;
+        this.player = copyCamera.player;
+        this.mouseSensitivity = copyCamera.mouseSensitivity;
+
+        canMove = false;
+    }
+
     public void Move(float deltaTime){
-        //FREE CAMERA MOVEMENT
-        if (!hasPlayer){
-            Vector3f direction = new Vector3f();
-            if (Keyboard.isKeyDown(Keyboard.KEY_W))
-                direction.x -=  cameraSpeed*deltaTime;
-            if (Keyboard.isKeyDown(Keyboard.KEY_D))
-                direction.z -=  cameraSpeed*deltaTime;
-            if (Keyboard.isKeyDown(Keyboard.KEY_A))
-                direction.z +=  cameraSpeed*deltaTime;
-            if (Keyboard.isKeyDown(Keyboard.KEY_S))
-                direction.x +=  cameraSpeed*deltaTime;
-            if (Keyboard.isKeyDown(Keyboard.KEY_SPACE))
-                direction.y +=  cameraSpeed*deltaTime;
-            if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL))
-                direction.y -=  cameraSpeed*deltaTime;
-            if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
-                System.exit(0);
+        if (canMove) {
+            //FREE CAMERA MOVEMENT
+            if (!hasPlayer){
+                Vector3f direction = new Vector3f();
+                if (Keyboard.isKeyDown(Keyboard.KEY_W))
+                    direction.x -=  cameraSpeed*deltaTime;
+                if (Keyboard.isKeyDown(Keyboard.KEY_D))
+                    direction.z -=  cameraSpeed*deltaTime;
+                if (Keyboard.isKeyDown(Keyboard.KEY_A))
+                    direction.z +=  cameraSpeed*deltaTime;
+                if (Keyboard.isKeyDown(Keyboard.KEY_S))
+                    direction.x +=  cameraSpeed*deltaTime;
+                if (Keyboard.isKeyDown(Keyboard.KEY_SPACE))
+                    direction.y +=  cameraSpeed*deltaTime;
+                if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL))
+                    direction.y -=  cameraSpeed*deltaTime;
+                if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
+                    System.exit(0);
 
-            moveFloatingCamera(direction);
-            Rotate();
+                moveFloatingCamera(direction);
+                Rotate();
 
-        }else{ //FOLLOW PLAYER MOVEMENT
-            CalculateZoom();
-            CalculatePitch();
-            //CalculateAngleArroundPlayer();
-            float horizontalDistance = CalculateHorizontalDistance();
-            float verticalDistance = CalculateVerticalDistance();
-            CalculateCameraPosition(horizontalDistance, verticalDistance);
-            yaw = 180-player.getRotation().y;
+            }else{ //FOLLOW PLAYER MOVEMENT
+                CalculateZoom();
+                CalculatePitch();
+                //CalculateAngleArroundPlayer();
+                float horizontalDistance = CalculateHorizontalDistance();
+                float verticalDistance = CalculateVerticalDistance();
+                CalculateCameraPosition(horizontalDistance, verticalDistance);
+                yaw = 180-player.getRotation().y;
+            }
         }
     }
 

@@ -110,23 +110,25 @@ public class MasterRenderer {
         // Water rendering
         if (!water.isEmpty())
         {
+            Camera reflectionCamera = new Camera(camera);
+
             waterShader.Start();
             wfb.bindReflectionFrameBuffer();
             terrainShader.Start();
             terrainShader.LoadSkyColour(skyR, skyG, skyB);
             terrainShader.LoadLights(lights);
-            terrainShader.LoadViewMatrix(camera);
+            terrainShader.LoadViewMatrix(reflectionCamera);
             terrainRenderer.Render(terrains);
             terrainShader.Stop();
             shader.Start();
             shader.LoadSkyColour(skyR, skyG, skyB);
             shader.LoadLights(lights);
-            shader.LoadViewMatrix(camera);
+            shader.LoadViewMatrix(reflectionCamera);
             entityRenderer.Render(entities);
             shader.Stop();
-            skyboxRenderer.Render(camera, new Vector3f(skyR, skyG, skyB));
+            skyboxRenderer.Render(reflectionCamera, new Vector3f(skyR, skyG, skyB));
             wfb.unbindCurrentFrameBuffer();
-            waterRenderer.Render(water, camera);
+            waterRenderer.Render(water, reflectionCamera);
             waterShader.Stop();
         }
 

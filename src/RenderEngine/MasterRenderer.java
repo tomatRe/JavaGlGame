@@ -110,7 +110,12 @@ public class MasterRenderer {
         // Water rendering
         if (!water.isEmpty())
         {
+            // Calculate reflection positions and angles
             Camera reflectionCamera = new Camera(camera);
+            Vector3f reflectionPosition = reflectionCamera.getPosition();
+            reflectionPosition.y = water.get(0).getHeight() - reflectionPosition.y;
+
+            reflectionCamera.setPosition(reflectionPosition);
 
             waterShader.Start();
             wfb.bindReflectionFrameBuffer();
